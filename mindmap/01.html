@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.2.0/dist/style.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@6.7.0"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.2.7"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.2.0/dist/index.umd.min.js"></script><script>(r => {
+                setTimeout(r);
+              })(() => {
+  const {
+    markmap,
+    mm
+  } = window;
+  const toolbar = new markmap.Toolbar();
+  toolbar.attach(mm);
+  const el = toolbar.render();
+  el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, data) => {
+        const {
+          Markmap
+        } = getMarkmap();
+        window.mm = Markmap.create('svg#mindmap', getOptions == null ? void 0 : getOptions(), data);
+      })(() => window.markmap,null,{"t":"heading","d":1,"p":{"lines":[0,1]},"v":"用于显著和特定类别的目标检测的先进深度学习技术","c":[{"t":"heading","d":2,"p":{"lines":[1,2]},"v":"<a href=\"/pages/24a19d/#引言\" target=\"_blank\">引言</a>"},{"t":"heading","d":2,"p":{"lines":[2,3]},"v":"<a href=\"/pages/24a19d/#预备知识\" target=\"_blank\">预备知识</a>"},{"t":"heading","d":2,"p":{"lines":[3,4]},"v":"<a href=\"/pages/24a19d/#目标检测的现代方法\" target=\"_blank\">目标检测的现代方法</a>","c":[{"t":"list_item","d":4,"p":{"lines":[4,5]},"v":"OD中的现代方法"},{"t":"list_item","d":4,"p":{"lines":[5,6]},"v":"SOD的现代方法"},{"t":"list_item","d":4,"p":{"lines":[6,7]},"v":"COD的现代方法"}]},{"t":"heading","d":2,"p":{"lines":[7,8]},"v":"<a href=\"/pages/24a19d/#OD、SOD、COD之间的关系\" target=\"_blank\">OD、SOD、COD之间的关系</a>","c":[{"t":"list_item","d":4,"p":{"lines":[8,9]},"v":"OD与SOD的关系"},{"t":"list_item","d":4,"p":{"lines":[9,10]},"v":"SOD与COD的关系"},{"t":"list_item","d":4,"p":{"lines":[10,11]},"v":"COD与OD的关系"}]},{"t":"heading","d":2,"p":{"lines":[11,12]},"v":"<a href=\"/pages/24a19d/#基准和评价指标\" target=\"_blank\">基准和评价指标</a>","c":[{"t":"list_item","d":4,"p":{"lines":[12,13]},"v":"OD的基准"},{"t":"list_item","d":4,"p":{"lines":[13,14]},"v":"SOD的基准"},{"t":"list_item","d":4,"p":{"lines":[14,15]},"v":"COD的基准"},{"t":"list_item","d":4,"p":{"lines":[15,16]},"v":"OD的评价指标"},{"t":"list_item","d":4,"p":{"lines":[16,17]},"v":"SOD的评价指标"},{"t":"list_item","d":4,"p":{"lines":[17,18]},"v":"COD的评价指标"}]},{"t":"heading","d":2,"p":{"lines":[18,19]},"v":"<a href=\"/pages/24a19d/#实验对比\" target=\"_blank\">实验对比</a>","c":[{"t":"list_item","d":4,"p":{"lines":[19,20]},"v":"OD方法的实验对比"},{"t":"list_item","d":4,"p":{"lines":[20,21]},"v":"SOD方法的实验对比"},{"t":"list_item","d":4,"p":{"lines":[21,22]},"v":"COD方法的实验对比"}]},{"t":"heading","d":2,"p":{"lines":[22,23]},"v":"<a href=\"/pages/24a19d/#讨论\" target=\"_blank\">讨论</a>","c":[{"t":"list_item","d":4,"p":{"lines":[23,24]},"v":"深度学习带来的优"},{"t":"list_item","d":4,"p":{"lines":[24,25]},"v":"来研究方向"}]},{"t":"heading","d":2,"p":{"lines":[25,26]},"v":"<a href=\"/pages/24a19d/#结论\" target=\"_blank\">结论</a>"},{"t":"heading","d":2,"p":{"lines":[26,27]},"v":"致谢"},{"t":"heading","d":2,"p":{"lines":[27,28]},"v":"作者"},{"t":"heading","d":2,"p":{"lines":[28,29]},"v":"参考文献"}]})</script>
+</body>
+</html>
