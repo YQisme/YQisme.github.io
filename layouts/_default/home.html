@@ -1,0 +1,184 @@
+{{ define "main" }}
+
+<style>
+/* ===== 整体布局 ===== */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+/* ===== 头像 ===== */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+/* ===== 标题 ===== */
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+/* ===== 描述 ===== */
+.hero p {
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== 社交图标 ===== */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.social-icons a {
+  padding: 10px;
+  border-radius: 50%;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.social-icons a:hover {
+  background: #f5f5f5;
+  transform: translateY(-3px);
+}
+
+.social-icons svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== 项目卡片 ===== */
+.projects {
+  max-width: 1000px;
+  margin: 60px auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  transition: 0.2s;
+  background: #fff;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 16px;
+}
+
+/* ===== 文章列表 ===== */
+.posts {
+  max-width: 800px;
+  margin: 60px auto;
+}
+</style>
+
+
+<!-- ===== Hero（头像 + 简介 + 社交） ===== -->
+<section class="hero">
+
+  <img src="/images/avatar.jpg" class="avatar">
+
+  <h1>👋 你好，我是开发者</h1>
+
+  <p>
+    专注于 工业 IoT / 3D 可视化 / AI 视觉  
+    构建高性能系统与交互体验
+  </p>
+
+  <!-- 社交图标 -->
+  <div class="social-icons">
+
+    <a href="https://github.com/你的用户名" target="_blank">
+      <i data-feather="github"></i>
+    </a>
+
+    <a href="mailto:你的邮箱">
+      <i data-feather="mail"></i>
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- ===== 项目精选 ===== -->
+<section class="projects">
+  <h2 style="text-align:center;">🚀 项目精选</h2>
+
+  <div class="grid">
+
+    {{ range first 6 (where site.RegularPages "Section" "projects") }}
+
+      <a href="{{ .RelPermalink }}">
+
+        <div class="card">
+
+          {{ with .Params.image }}
+          <img src="{{ . }}">
+          {{ end }}
+
+          <div class="card-content">
+            <h3>{{ .Title }}</h3>
+            <p>{{ .Summary | truncate 80 }}</p>
+          </div>
+
+        </div>
+
+      </a>
+
+    {{ end }}
+
+  </div>
+</section>
+
+
+<!-- ===== 最新文章 ===== -->
+<section class="posts">
+
+  <h2 style="text-align:center;">📝 最新文章</h2>
+
+  {{ range first 5 (where site.RegularPages "Section" "posts") }}
+
+    <div style="margin:15px 0;">
+      <a href="{{ .RelPermalink }}">
+        <strong>{{ .Title }}</strong>
+      </a>
+    </div>
+
+  {{ end }}
+
+</section>
+
+
+<!-- ===== Feather Icons ===== -->
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+  feather.replace()
+</script>
+
+{{ end }}

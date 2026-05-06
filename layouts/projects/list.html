@@ -1,0 +1,48 @@
+{{ define "main" }}
+
+<div class="main">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p>{{ .Content }}</p>
+  </header>
+
+  <div class="post-entry-list" style="
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+    gap:24px;
+  ">
+
+    {{ range .Pages }}
+      <article class="post-entry" style="
+        border-radius:12px;
+        overflow:hidden;
+        transition:0.2s;
+      ">
+
+        <a href="{{ .RelPermalink }}">
+
+          {{ with .Params.image }}
+          <div style="height:180px; overflow:hidden;">
+            <img src="{{ . }}" style="width:100%; object-fit:cover;">
+          </div>
+          {{ end }}
+
+          <div style="padding:16px;">
+            <h2 style="margin:0 0 8px;">
+              {{ .Title }}
+            </h2>
+
+            <p style="color:#666; font-size:14px;">
+              {{ .Summary | truncate 80 }}
+            </p>
+
+          </div>
+        </a>
+
+      </article>
+    {{ end }}
+
+  </div>
+</div>
+
+{{ end }}
