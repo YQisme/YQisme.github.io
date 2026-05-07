@@ -1,0 +1,39 @@
+{{- $dateFmt := "2006-01-02" -}}
+{{- $created := "" -}}
+{{- if not .Date.IsZero -}}
+  {{- $created = .Date.Format $dateFmt -}}
+{{- end -}}
+{{- $updated := "" -}}
+{{- if not .Lastmod.IsZero -}}
+  {{- $updated = .Lastmod.Format $dateFmt -}}
+{{- end -}}
+
+{{- $lmOn := true -}}
+{{- if isset site.Params "showlastmod" -}}
+  {{- $lmOn = index site.Params "showlastmod" -}}
+{{- end -}}
+{{- $showLastMod := and $lmOn (not .Lastmod.IsZero) (ne .Lastmod.Unix .Date.Unix) -}}
+
+{{- $showRT := true -}}
+{{- if isset site.Params "showreadingtime" -}}
+  {{- $showRT = index site.Params "showreadingtime" -}}
+{{- end -}}
+{{- $showWC := true -}}
+{{- if isset site.Params "showwordcount" -}}
+  {{- $showWC = index site.Params "showwordcount" -}}
+{{- end -}}
+
+<div class="post-meta-detail">
+  {{- if $created }}
+  <div class="post-meta-line">创建于：{{ $created }}</div>
+  {{- end }}
+  {{- if $showLastMod }}
+  <div class="post-meta-line">最后更新：{{ $updated }}</div>
+  {{- end }}
+  {{- if $showRT }}
+  <div class="post-meta-line">阅读时间：{{ .ReadingTime }} 分钟</div>
+  {{- end }}
+  {{- if $showWC }}
+  <div class="post-meta-line">字数：{{ .WordCount }}</div>
+  {{- end }}
+</div>

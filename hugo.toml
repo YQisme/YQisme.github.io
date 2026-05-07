@@ -11,20 +11,28 @@ languageCode = "zh-cn"
   env = "production"
 
   ShowReadingTime = true
+  ShowPostNavLinks = true
   ShowShareButtons = true
   ShowCodeCopyButtons = true
   ShowBreadCrumbs = true
   ShowToc = true
+  ShowWordCount = true
+  ShowLastMod = true
+
 
   defaultTheme = "auto"
 
   # 启用搜索
   fuseOpts = { isCaseSensitive = false, shouldSort = true }
 
+enableGitInfo = true
+
 # 必须：启用搜索
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 
+[frontmatter]
+  lastmod = [":git", "lastmod", "date"]
 [[menu.main]]
   name = "博客"
   url = "/posts/"
