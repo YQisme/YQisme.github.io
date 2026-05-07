@@ -3,6 +3,8 @@ title = "Ean7的小站"
 theme = "PaperMod"
 languageCode = "zh-cn"
 
+enableGitInfo = true
+
 [pagination]
   pagerSize = 10
 
@@ -24,8 +26,6 @@ languageCode = "zh-cn"
 
   # 启用搜索
   fuseOpts = { isCaseSensitive = false, shouldSort = true }
-
-enableGitInfo = true
 
 # 必须：启用搜索
 [outputs]
