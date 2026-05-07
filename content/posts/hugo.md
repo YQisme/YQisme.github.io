@@ -633,3 +633,364 @@ vercel绑定github账号后，设置`Project Name`作为域名前缀后，`Build
 ---
 
 最后在vercel左侧的domains中添加对应额域名即可（等几分钟生效，显示`DNS Change Recommended`）
+
+# 进阶
+
+## 查看访问数据
+
+Cloudflare Analytics 很适合现在的 Hugo + Vercel 博客：
+
+- 免费
+- 不用数据库
+- 不需要后端
+- 很轻量
+- 不影响网站速度
+- 不需要 Cookie 弹窗（默认隐私优先） 
+
+最简单的接入方式是：
+
+```
+Hugo → Vercel
+       ↓
+Cloudflare Web Analytics
+```
+
+------
+
+### 一、先创建 Cloudflare 账号
+
+进入：
+
+[Cloudflare Dashboard](https://dash.cloudflare.com?utm_source=chatgpt.com)
+
+注册登录即可。
+
+------
+
+### 二、创建 Analytics Site
+
+进入：
+
+[Cloudflare Web Analytics](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fweb-analytics&utm_source=chatgpt.com)
+
+点击：
+
+```
+Add a site
+```
+
+填写你的网站：
+
+```
+https://xxx.vercel.app
+```
+
+------
+
+### 三、获得统计脚本
+
+Cloudflare 会给你一段：
+
+```
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "xxxx"}'></script>
+```
+
+官方文档说明：
+
+> 只需要一个 JS snippet 即可开始统计。 
+
+------
+
+### 四、Hugo + PaperMod 正确接入方式
+
+你现在用的是 PaperMod。
+
+#### 创建文件：
+
+```
+layouts/partials/extend_head.html
+```
+
+如果没有就自己创建。
+
+------
+
+### 五、把统计代码放进去
+
+例如：
+
+```
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+data-cf-beacon='{"token": "xxxxxxxx"}'></script>
+```
+
+### 六、重新部署
+
+```
+git add .
+git commit -m "add analytics"
+git push
+```
+
+Vercel 会自动重新部署。
+
+------
+
+### 七、多久能看到数据？
+
+一般：
+
+```
+1~10 分钟
+```
+
+之后你就能看到：
+
+- 访问人数
+- 页面浏览量
+- 国家地区
+- 来源页面
+- 设备
+- 浏览器
+- 热门文章
+
+------
+
+### 八、查看统计数据
+
+进入：
+
+[Cloudflare Analytics Dashboard](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fweb-analytics&utm_source=chatgpt.com)
+
+就能看到仪表盘。
+
+## 接入评论
+
+Giscus 是现在 Hugo / PaperMod 最主流的评论系统之一：
+
+- 基于 GitHub Discussions
+- 免费
+- 无数据库
+- 非常适合技术博客
+- 和 Hugo/PaperMod 兼容很好 
+
+你现在的：
+
+```
+Hugo + PaperMod + GitHub + Vercel
+```
+
+👉 非常适合接 Giscus。
+
+------
+
+### 一、Giscus 工作原理
+
+```
+博客文章
+     ↓
+GitHub Discussions
+     ↓
+Giscus 读取评论
+     ↓
+显示到文章下面
+```
+
+👉 本质：
+
+- 评论存在 GitHub
+- 网站只是嵌入评论框
+
+------
+
+### 二、先开启 GitHub Discussions
+
+进入仓库：
+
+```
+YQisme/YQisme.github
+```
+
+点击：
+
+```
+Settings → General
+```
+
+拉到下面：
+
+```
+Features → Discussions
+```
+
+✔ 勾选启用。
+
+------
+
+### 三、安装 Giscus App（关键）
+
+打开：
+
+[Giscus 官网](https://giscus.app/?utm_source=chatgpt.com)
+
+然后：
+
+## 1️⃣ 授权 GitHub
+
+点击：
+
+[GitHub Apps - giscus](https://github.com/apps/giscus)
+
+```
+Configure
+```
+
+------
+
+## 2️⃣ 选择仓库
+
+选：
+
+```
+YQisme/YQisme.github.io
+```
+
+------
+
+### 四、Giscus 页面配置
+
+进入：
+
+[Giscus 配置页面](https://giscus.app/zh-CN?utm_source=chatgpt.com)
+
+填写：
+
+仓库
+
+```
+YQisme/YQisme.github.io
+```
+
+------
+
+#### 页面 ↔️ discussion 映射关系
+
+选择：
+
+```
+pathname
+```
+
+👉 含义：
+
+```
+/posts/hello/
+```
+
+对应一个 discussion。
+
+### Discussion 分类
+
+推荐：
+
+```
+Announcements
+```
+
+（如果没有就创建）
+
+------
+
+## Theme
+
+推荐：
+
+```
+用户偏好的色彩方案
+```
+
+自动适配深色模式。
+
+------
+
+### 五、然后它会自动生成 script
+
+类似：
+
+```
+<script src="https://giscus.app/client.js"
+        data-repo="YQisme/YQisme.github.io"
+        data-repo-id="..."
+        data-category="Announcements"
+        data-category-id="..."
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+```
+
+官方推荐就是直接嵌入 script。 
+
+------
+
+### 六、Hugo + PaperMod 正确接入方式
+
+## 创建文件：
+
+```
+layouts/partials/comments.html
+```
+
+------
+
+## 把 Giscus script 粘进去
+
+完整粘贴即可。
+
+------
+
+### 七、开启 PaperMod 评论功能
+
+编辑：
+
+```
+hugo.toml
+```
+
+加入：
+
+```
+[params]
+comments = true
+```
+
+PaperMod 需要开启 comments。 
+
+------
+
+# 八、重新部署
+
+```
+git add .
+git commit -m "add giscus"
+git push
+```
+
+Vercel 会自动部署。
+
+------
+
+# 九、成功后效果
+
+每篇文章底部会出现：
+
+- 评论框
+- GitHub 登录
+- Emoji reaction
+- Discussions 链接
