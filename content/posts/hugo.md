@@ -708,7 +708,7 @@ Cloudflare 会给你一段：
 #### 创建文件：
 
 ```
-layouts/partials/extend_head.html
+layouts/_partials/extend_head.html
 ```
 
 如果没有就自己创建。
@@ -944,7 +944,7 @@ Announcements
 ## 创建文件：
 
 ```
-layouts/partials/comments.html
+layouts/_partials/comments.html
 ```
 
 ------
@@ -974,7 +974,7 @@ PaperMod 需要开启 comments。
 
 ------
 
-# 八、重新部署
+### 八、重新部署
 
 ```
 git add .
@@ -986,7 +986,7 @@ Vercel 会自动部署。
 
 ------
 
-# 九、成功后效果
+### 九、成功后效果
 
 每篇文章底部会出现：
 
