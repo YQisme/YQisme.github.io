@@ -1,0 +1,45 @@
+{{- define "main" }}
+{{ partial "categories/terms-styles.html" . }}
+
+<div class="taxonomy-categories-page">
+  <header class="taxonomy-categories-page__header">
+    <div class="taxonomy-categories-page__title-row">
+      {{- if .Title }}
+      <h1 class="taxonomy-categories-page__title">{{ .Title }}</h1>
+      {{- end }}
+      <a class="taxonomy-categories-page__tags-btn" href="{{ "tags/" | relLangURL }}">标签</a>
+    </div>
+    {{- if .Description }}
+    <div class="post-description taxonomy-categories-page__desc">
+      {{ .Description }}
+    </div>
+    {{- end }}
+  </header>
+
+  <div class="taxonomy-categories-page__layout">
+    <aside class="taxonomy-categories-page__sidebar" aria-label="分类列表">
+      <nav>
+        <ul class="taxonomy-categories-page__nav">
+          {{- $type := .Type }}
+          {{- range .Data.Terms.Alphabetical }}
+            {{- $name := .Name }}
+            {{- $count := .Count }}
+            {{- with site.GetPage (printf "/%s/%s" $type $name) }}
+            <li>
+              <a href="{{ .Permalink }}" class="taxonomy-categories-page__nav-link">
+                <span class="taxonomy-categories-page__nav-text">{{ .LinkTitle }}</span>
+                <span class="taxonomy-categories-page__count">{{ $count }}</span>
+              </a>
+            </li>
+            {{- end }}
+          {{- end }}
+        </ul>
+      </nav>
+    </aside>
+    <div class="taxonomy-categories-page__main md-content">
+      <p class="taxonomy-categories-page__hint">在左侧选择分类可浏览该分类下的文章列表。</p>
+    </div>
+  </div>
+</div>
+
+{{- end }}{{/* end main */ -}}
