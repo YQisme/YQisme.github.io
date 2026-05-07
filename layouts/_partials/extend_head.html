@@ -1,0 +1,267 @@
+{{- /* 站点标题与首页大标题：字体 + 渐变流动 + 动效；尊重 prefers-reduced-motion */ -}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ----- 顶栏站点名：流动渐变 + 悬停微光 ----- */
+.logo-brand-text {
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  background: linear-gradient(
+    105deg,
+    #4f46e5 0%,
+    #9333ea 25%,
+    #db2777 50%,
+    #ea580c 75%,
+    #4f46e5 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: brand-gradient-flow 8s ease infinite;
+  transition: filter 0.35s ease, transform 0.35s ease;
+}
+html[data-theme="dark"] .logo-brand-text {
+  background: linear-gradient(
+    105deg,
+    #22d3ee 0%,
+    #a78bfa 28%,
+    #fb7185 55%,
+    #fbbf24 78%,
+    #22d3ee 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] .logo-brand-text {
+    background: linear-gradient(
+      105deg,
+      #22d3ee 0%,
+      #a78bfa 28%,
+      #fb7185 55%,
+      #fbbf24 78%,
+      #22d3ee 100%
+    );
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+.logo a:hover .logo-brand-text {
+  filter: brightness(1.08) drop-shadow(0 0 12px rgba(147, 51, 234, 0.35));
+}
+
+@keyframes brand-gradient-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ----- 首页 Hero 标题 ----- */
+.hero-title {
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+  line-height: 1.35;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+.hero-title__wave {
+  display: inline-block;
+  margin-right: 0.35em;
+  animation: hero-wave 2.6s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+/* 外层：从左向右裁切展开；内层：保留整段渐变不断裂 */
+.hero-title__main {
+  display: inline-block;
+  vertical-align: bottom;
+  max-width: 100%;
+  clip-path: inset(0 100% 0 0);
+  animation: hero-title-unfold 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+.hero-title__main-inner {
+  display: inline-block;
+  white-space: nowrap;
+  background: linear-gradient(
+    118deg,
+    #0284c7 0%,
+    #7c3aed 35%,
+    #db2777 68%,
+    #0284c7 100%
+  );
+  background-size: 260% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: brand-gradient-flow 6.5s ease infinite;
+}
+html[data-theme="dark"] .hero-title__main-inner {
+  background: linear-gradient(
+    118deg,
+    #22d3ee 0%,
+    #c084fc 38%,
+    #fb7185 72%,
+    #22d3ee 100%
+  );
+  background-size: 260% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] .hero-title__main-inner {
+    background: linear-gradient(
+      118deg,
+      #22d3ee 0%,
+      #c084fc 38%,
+      #fb7185 72%,
+      #22d3ee 100%
+    );
+    background-size: 260% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+@keyframes hero-wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(16deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(12deg);
+  }
+  80% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes hero-title-unfold {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ----- 主导航：悬停字体描边 + 光晕；缩放做在 span/svg 上，避免整块 a 放大撑出横向滚动条 ----- */
+.header .menu {
+  padding-block: 6px;
+  padding-inline: 4px;
+}
+.header .menu a {
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  transition: color 0.22s ease;
+}
+.header .menu a > span {
+  display: inline-block;
+  transform: scale(1);
+  transition: transform 0.22s ease, text-shadow 0.22s ease;
+}
+.header .menu a svg {
+  display: inline-block;
+  vertical-align: -0.12em;
+  transform: scale(1);
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+.header .menu a:hover {
+  color: var(--primary);
+}
+/* 浅色：细暗边 + 光晕 */
+.header .menu a:hover > span {
+  transform: scale(1.06);
+  text-shadow:
+    -1px -1px 0 rgba(15, 23, 42, 0.24),
+    1px -1px 0 rgba(15, 23, 42, 0.24),
+    -1px 1px 0 rgba(15, 23, 42, 0.24),
+    1px 1px 0 rgba(15, 23, 42, 0.24),
+    0 -1px 0 rgba(15, 23, 42, 0.24),
+    0 1px 0 rgba(15, 23, 42, 0.24),
+    -1px 0 0 rgba(15, 23, 42, 0.24),
+    1px 0 0 rgba(15, 23, 42, 0.24),
+    0 0 12px color-mix(in srgb, var(--primary) 40%, transparent),
+    0 0 26px color-mix(in srgb, var(--primary) 26%, transparent);
+}
+.header .menu a:hover svg {
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--primary) 45%, transparent));
+}
+html[data-theme="dark"] .header .menu a:hover > span {
+  text-shadow:
+    -1px -1px 0 rgba(248, 250, 252, 0.18),
+    1px -1px 0 rgba(248, 250, 252, 0.18),
+    -1px 1px 0 rgba(248, 250, 252, 0.18),
+    1px 1px 0 rgba(248, 250, 252, 0.18),
+    0 -1px 0 rgba(248, 250, 252, 0.18),
+    0 1px 0 rgba(248, 250, 252, 0.18),
+    -1px 0 0 rgba(248, 250, 252, 0.18),
+    1px 0 0 rgba(248, 250, 252, 0.18),
+    0 0 14px color-mix(in srgb, var(--primary) 52%, transparent),
+    0 0 30px color-mix(in srgb, var(--content) 30%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] .header .menu a:hover > span {
+    text-shadow:
+      -1px -1px 0 rgba(248, 250, 252, 0.18),
+      1px -1px 0 rgba(248, 250, 252, 0.18),
+      -1px 1px 0 rgba(248, 250, 252, 0.18),
+      1px 1px 0 rgba(248, 250, 252, 0.18),
+      0 -1px 0 rgba(248, 250, 252, 0.18),
+      0 1px 0 rgba(248, 250, 252, 0.18),
+      -1px 0 0 rgba(248, 250, 252, 0.18),
+      1px 0 0 rgba(248, 250, 252, 0.18),
+      0 0 14px color-mix(in srgb, var(--primary) 52%, transparent),
+      0 0 30px color-mix(in srgb, var(--content) 30%, transparent);
+  }
+}
+.header .menu a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header .menu a:hover > span,
+  .header .menu a:hover svg {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .logo-brand-text {
+    animation: none !important;
+    background: none !important;
+    -webkit-text-fill-color: unset;
+    color: var(--primary) !important;
+  }
+  .hero-title__main {
+    animation: none !important;
+    clip-path: inset(0 0 0 0) !important;
+  }
+  .hero-title__main-inner {
+    animation: none !important;
+    background: none !important;
+    -webkit-text-fill-color: unset;
+    color: var(--primary) !important;
+  }
+  .hero-title__wave {
+    animation: none !important;
+  }
+}
+</style>

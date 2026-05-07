@@ -1,5 +1,6 @@
 {{- define "main" }}
-{{ partial "categories/terms-styles.html" . }}
+{{- $css := readFile "layouts/categories/taxonomy-categories.css" -}}
+<style>{{ $css | safe.CSS }}</style>
 
 <div class="taxonomy-categories-page">
   <header class="taxonomy-categories-page__header">
