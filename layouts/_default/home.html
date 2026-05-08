@@ -244,6 +244,51 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     box-shadow: none !important;
   }
 }
+
+/* ===== 最新 / 最热 切换标签 ===== */
+.posts-head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.15rem;
+}
+.posts-head__tab {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+  cursor: pointer;
+  color: var(--secondary);
+  opacity: 0.5;
+  padding: 0.35rem 0.65rem;
+  border-radius: 10px;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.posts-head__tab:hover {
+  opacity: 0.82;
+}
+.posts-head__tab--active {
+  opacity: 1;
+  color: var(--primary);
+  font-weight: 700;
+}
+.posts-head__sep {
+  color: var(--secondary);
+  opacity: 0.35;
+  user-select: none;
+  font-size: 1.1rem;
+}
+.posts-list__pv {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  padding-inline-start: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--secondary);
+}
 </style>
 
 
@@ -280,18 +325,264 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 </section>
 
 
-<!-- ===== 最新文章 ===== -->
-<section class="posts">
+<!-- ===== 最新文章 / 最热文章（不蒜子 page_pv，iframe 读取各文 PV 后排序） ===== -->
+<section class="posts" aria-label="文章列表">
 
-  <h2 style="text-align:center;">📝 最新文章</h2>
+  <div class="posts-head" role="tablist" aria-label="最新与最热切换">
+    <button type="button" role="tab" id="tab-latest" class="posts-head__tab posts-head__tab--active" aria-selected="true" aria-controls="panel-latest">📝 最新文章</button>
+    <span class="posts-head__sep" aria-hidden="true">·</span>
+    <button type="button" role="tab" id="tab-hot" class="posts-head__tab" aria-selected="false" aria-controls="panel-hot">🔥 最热文章</button>
+  </div>
 
-  <ol class="posts-list">
-    {{ range first 5 (where site.RegularPages "Section" "posts") }}
-    <li>
-      <a href="{{ .RelPermalink }}" class="posts-list__link"><span class="posts-list__title">{{ .Title }}</span></a>
-    </li>
-    {{ end }}
-  </ol>
+  <div id="panel-latest" role="tabpanel" aria-labelledby="tab-latest" class="posts-panel">
+    <ol class="posts-list">
+      {{ range first 5 ((where site.RegularPages "Section" "posts").ByDate.Reverse) }}
+      <li>
+        <a href="{{ .RelPermalink }}" class="posts-list__link"><span class="posts-list__title">{{ .Title }}</span></a>
+      </li>
+      {{ end }}
+    </ol>
+  </div>
+
+  <div id="panel-hot" role="tabpanel" aria-labelledby="tab-hot" class="posts-panel" hidden>
+    <ol id="posts-list-hot" class="posts-list" aria-live="polite">
+      <li>
+        <span class="posts-list__link" style="cursor: default; font-weight: 400; color: var(--secondary);">正在根据各页阅读量进行排序…</span>
+      </li>
+    </ol>
+  </div>
+
+  {{- $pvPosts := where site.RegularPages "Section" "posts" -}}
+  {{- $pvRows := slice -}}
+  {{- range $pvPosts -}}
+    {{- $pvRows = $pvRows | append (dict "title" .Title "url" .Permalink) -}}
+  {{- end -}}
+  <script type="application/json" id="home-posts-pv-json">{{ $pvRows | jsonify (dict "noHTMLEscape" true) | safeJS }}</script>
+  <script>
+(function () {
+  /** 最热列表缓存：按访客本地「日历日」一天更新一次（过本地午夜后首次访问会重新拉取）。构建时写入的 posts JSON 仍只在 hugo build 时生成，并非每次访问生成。 */
+  var HOT_CACHE_KEY = 'home-busuanzi-hot-v1';
+
+  var ROTATE_MS = 10000;
+  var tabLatest = document.getElementById('tab-latest');
+  var tabHot = document.getElementById('tab-hot');
+  var panelLatest = document.getElementById('panel-latest');
+  var panelHot = document.getElementById('panel-hot');
+  var hotList = document.getElementById('posts-list-hot');
+  var jsonEl = document.getElementById('home-posts-pv-json');
+  if (!tabLatest || !tabHot || !panelLatest || !panelHot || !hotList || !jsonEl) return;
+
+  var posts = [];
+  try {
+    posts = JSON.parse(jsonEl.textContent || '[]');
+  } catch (e) {
+    posts = [];
+  }
+
+  function localCalendarDay() {
+    var d = new Date();
+    var m = ('0' + (d.getMonth() + 1)).slice(-2);
+    var day = ('0' + d.getDate()).slice(-2);
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+
+  function postsSignature(ps) {
+    return ps.map(function (p) { return p.url; }).sort().join('|');
+  }
+
+  function readHotCache(ps) {
+    try {
+      var raw = localStorage.getItem(HOT_CACHE_KEY);
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      if (o.v !== 1 || !o.day || !Array.isArray(o.top)) return null;
+      if (o.day !== localCalendarDay()) return null;
+      if (o.sig !== postsSignature(ps)) return null;
+      return o.top;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeHotCache(ps, top) {
+    try {
+      localStorage.setItem(HOT_CACHE_KEY, JSON.stringify({
+        v: 1,
+        day: localCalendarDay(),
+        sig: postsSignature(ps),
+        top: top
+      }));
+    } catch (e) {}
+  }
+
+  function renderHotList(top) {
+    hotList.innerHTML = '';
+    top.forEach(function (item) {
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = item.url;
+      a.className = 'posts-list__link';
+      var spanTitle = document.createElement('span');
+      spanTitle.className = 'posts-list__title';
+      spanTitle.textContent = item.title;
+      var spanPv = document.createElement('span');
+      spanPv.className = 'posts-list__pv';
+      spanPv.textContent = String(item.pv);
+      spanPv.setAttribute('title', '本文阅读量（不蒜子）');
+      a.appendChild(spanTitle);
+      a.appendChild(spanPv);
+      li.appendChild(a);
+      hotList.appendChild(li);
+    });
+  }
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var activeMode = 'latest';
+
+  function setPanel(which) {
+    var isLatest = which === 'latest';
+    tabLatest.classList.toggle('posts-head__tab--active', isLatest);
+    tabHot.classList.toggle('posts-head__tab--active', !isLatest);
+    tabLatest.setAttribute('aria-selected', isLatest);
+    tabHot.setAttribute('aria-selected', !isLatest);
+    panelLatest.hidden = !isLatest;
+    panelHot.hidden = isLatest;
+  }
+
+  function rotate() {
+    activeMode = activeMode === 'latest' ? 'hot' : 'latest';
+    setPanel(activeMode);
+  }
+
+  var rotateTimer = null;
+  function resetRotate() {
+    if (reduceMotion) return;
+    clearInterval(rotateTimer);
+    rotateTimer = setInterval(rotate, ROTATE_MS);
+  }
+
+  tabLatest.addEventListener('click', function () {
+    activeMode = 'latest';
+    setPanel('latest');
+    resetRotate();
+  });
+  tabHot.addEventListener('click', function () {
+    activeMode = 'hot';
+    setPanel('hot');
+    resetRotate();
+  });
+
+  if (!reduceMotion) {
+    rotateTimer = setInterval(rotate, ROTATE_MS);
+  }
+
+  function measurePv(url) {
+    return new Promise(function (resolve) {
+      var iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;left:0;top:0;opacity:0;pointer-events:none;visibility:hidden';
+      var settled = false;
+      function done(n) {
+        if (settled) return;
+        settled = true;
+        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+        resolve(n);
+      }
+      var started = Date.now();
+      var maxWait = 16000;
+      iframe.onload = function () {
+        function poll() {
+          try {
+            var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+            if (doc) {
+              var el = doc.getElementById('busuanzi_value_page_pv');
+              var raw = el && el.textContent ? el.textContent.trim() : '';
+              var normalized = raw.replace(/,/g, '').replace(/\s/g, '');
+              if (normalized && normalized !== '—' && /^\d+$/.test(normalized)) {
+                done(parseInt(normalized, 10));
+                return;
+              }
+            }
+          } catch (err) {
+            done(0);
+            return;
+          }
+          if (Date.now() - started > maxWait) {
+            done(0);
+            return;
+          }
+          requestAnimationFrame(poll);
+        }
+        requestAnimationFrame(poll);
+      };
+      iframe.onerror = function () { done(0); };
+      iframe.src = url;
+      document.body.appendChild(iframe);
+    });
+  }
+
+  function mapPool(items, mapper, concurrency, cb) {
+    var results = new Array(items.length);
+    var nextIndex = 0;
+    function worker() {
+      return new Promise(function (resolveWorker) {
+        function step() {
+          var i = nextIndex++;
+          if (i >= items.length) {
+            resolveWorker();
+            return;
+          }
+          Promise.resolve(mapper(items[i], i))
+            .then(function (val) {
+              results[i] = val;
+              step();
+            })
+            .catch(function () {
+              results[i] = { title: items[i].title, url: items[i].url, pv: 0 };
+              step();
+            });
+        }
+        step();
+      });
+    }
+    var n = Math.min(concurrency, Math.max(1, items.length));
+    Promise.all(Array.from({ length: n }, worker))
+      .then(function () { cb(null, results); })
+      .catch(function (e) { cb(e); });
+  }
+
+  var cachedTop = readHotCache(posts);
+  if (cachedTop && cachedTop.length) {
+    renderHotList(cachedTop);
+  } else {
+    mapPool(
+      posts,
+      function (p) {
+        return measurePv(p.url).then(function (pv) {
+          return { title: p.title, url: p.url, pv: pv };
+        });
+      },
+      3,
+      function (err, enriched) {
+        if (err || !enriched) {
+          hotList.innerHTML = '<li><span class="posts-list__link" style="cursor:default;font-weight:400;color:var(--secondary);">阅读量加载失败</span></li>';
+          return;
+        }
+        if (!enriched.length) {
+          hotList.innerHTML = '<li><span class="posts-list__link" style="cursor:default;font-weight:400;color:var(--secondary);">暂无文章</span></li>';
+          return;
+        }
+        enriched.sort(function (a, b) {
+          if (b.pv !== a.pv) return b.pv - a.pv;
+          return (a.title > b.title) ? 1 : (a.title < b.title ? -1 : 0);
+        });
+        var top = enriched.slice(0, 5);
+        writeHotCache(posts, top);
+        renderHotList(top);
+      }
+    );
+  }
+})();
+  </script>
 
 </section>
 
