@@ -280,6 +280,21 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 </section>
 
 
+<!-- ===== 最新文章 ===== -->
+<section class="posts">
+
+  <h2 style="text-align:center;">📝 最新文章</h2>
+
+  <ol class="posts-list">
+    {{ range first 5 (where site.RegularPages "Section" "posts") }}
+    <li>
+      <a href="{{ .RelPermalink }}" class="posts-list__link"><span class="posts-list__title">{{ .Title }}</span></a>
+    </li>
+    {{ end }}
+  </ol>
+
+</section>
+
 <!-- ===== 项目精选 ===== -->
 <section class="projects">
   <h2 style="text-align:center;">🚀 项目精选</h2>
@@ -308,22 +323,6 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     {{ end }}
 
   </div>
-</section>
-
-
-<!-- ===== 最新文章 ===== -->
-<section class="posts">
-
-  <h2 style="text-align:center;">📝 最新文章</h2>
-
-  <ol class="posts-list">
-    {{ range first 5 (where site.RegularPages "Section" "posts") }}
-    <li>
-      <a href="{{ .RelPermalink }}" class="posts-list__link"><span class="posts-list__title">{{ .Title }}</span></a>
-    </li>
-    {{ end }}
-  </ol>
-
 </section>
 
 <!-- ===== Feather Icons ===== -->
