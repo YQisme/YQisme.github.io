@@ -280,10 +280,32 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   user-select: none;
   font-size: 1.1rem;
 }
-.posts-list__pv {
+.posts-list__date {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  padding-inline-start: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--secondary);
+  white-space: nowrap;
+}
+.posts-list__pv-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
   flex-shrink: 0;
   margin-inline-start: auto;
   padding-inline-start: 0.5rem;
+}
+.posts-list__pv-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+  color: var(--secondary);
+  opacity: 0.88;
+}
+.posts-list__pv {
   font-size: 0.78rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -338,7 +360,13 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     <ol class="posts-list">
       {{ range first 5 ((where site.RegularPages "Section" "posts").ByDate.Reverse) }}
       <li>
-        <a href="{{ .RelPermalink }}" class="posts-list__link"><span class="posts-list__title">{{ .Title }}</span></a>
+        <a href="{{ .RelPermalink }}" class="posts-list__link">
+          <span class="posts-list__title">{{ .Title }}</span>
+          {{- $df := "2006-01-02" -}}
+          {{- $lm := .Lastmod -}}
+          {{- if .Lastmod.IsZero -}}{{- $lm = .Date -}}{{- end -}}
+          <time class="posts-list__date" datetime="{{ $lm.Format "2006-01-02T15:04:05Z07:00" }}" title="最后更新">{{ $lm.Format $df }}</time>
+        </a>
       </li>
       {{ end }}
     </ol>
@@ -415,6 +443,9 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     } catch (e) {}
   }
 
+  var eyeSvg =
+    '<svg class="posts-list__pv-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+
   function renderHotList(top) {
     hotList.innerHTML = '';
     top.forEach(function (item) {
@@ -425,12 +456,16 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       var spanTitle = document.createElement('span');
       spanTitle.className = 'posts-list__title';
       spanTitle.textContent = item.title;
+      var pvWrap = document.createElement('span');
+      pvWrap.className = 'posts-list__pv-wrap';
+      pvWrap.setAttribute('title', '本文阅读量（不蒜子）');
+      pvWrap.innerHTML = eyeSvg;
       var spanPv = document.createElement('span');
       spanPv.className = 'posts-list__pv';
       spanPv.textContent = String(item.pv);
-      spanPv.setAttribute('title', '本文阅读量（不蒜子）');
+      pvWrap.appendChild(spanPv);
       a.appendChild(spanTitle);
-      a.appendChild(spanPv);
+      a.appendChild(pvWrap);
       li.appendChild(a);
       hotList.appendChild(li);
     });
