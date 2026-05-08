@@ -36,4 +36,9 @@
   {{- if $showWC }}
   <div class="post-meta-line">字数：{{ .WordCount }}</div>
   {{- end }}
+  {{- if eq .Section "posts" }}
+  <div class="post-meta-line">
+    <span id="busuanzi_container_page_pv" aria-label="本文访问量">阅读量：<span id="busuanzi_value_page_pv">—</span></span>
+  </div>
+  {{- end }}
 </div>
