@@ -158,6 +158,8 @@
   min-width: 0;
   transform: scale(1);
   transition: transform 0.22s ease, text-shadow 0.22s ease;
+  user-select: text;
+  -webkit-user-select: text;
 }
 .posts-list__link::before {
   content: counter(post-num);
@@ -613,25 +615,57 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   }
 
   var rotateTimer = null;
+  /** 鼠标/焦点在文章区块内时为 true，此时不启动自动轮播 */
+  var postsInteractionPause = false;
   function resetRotate() {
     if (reduceMotion) return;
     clearInterval(rotateTimer);
+    rotateTimer = null;
+    if (postsInteractionPause) return;
     rotateTimer = setInterval(rotate, ROTATE_MS);
   }
 
-  tabLatest.addEventListener('click', function () {
+  function selectLatest() {
     activeMode = 'latest';
     setPanel('latest');
     resetRotate();
-  });
-  tabHot.addEventListener('click', function () {
+  }
+  function selectHot() {
     activeMode = 'hot';
     setPanel('hot');
     resetRotate();
-  });
+  }
+  tabLatest.addEventListener('click', selectLatest);
+  tabLatest.addEventListener('mouseenter', selectLatest);
+  tabHot.addEventListener('click', selectHot);
+  tabHot.addEventListener('mouseenter', selectHot);
 
   if (!reduceMotion) {
     rotateTimer = setInterval(rotate, ROTATE_MS);
+  }
+
+  /** 在列表上悬浮、拖选标题等操作时暂停轮播，避免面板切换打断选择；离开后恢复 */
+  var postsSection = document.querySelector('section.posts');
+  if (postsSection && !reduceMotion) {
+    function pauseRotate() {
+      postsInteractionPause = true;
+      if (rotateTimer) {
+        clearInterval(rotateTimer);
+        rotateTimer = null;
+      }
+    }
+    postsSection.addEventListener('mouseenter', pauseRotate);
+    postsSection.addEventListener('mouseleave', function () {
+      postsInteractionPause = false;
+      resetRotate();
+    });
+    postsSection.addEventListener('focusin', pauseRotate);
+    postsSection.addEventListener('focusout', function (ev) {
+      if (!postsSection.contains(ev.relatedTarget)) {
+        postsInteractionPause = false;
+        resetRotate();
+      }
+    });
   }
 
   function measurePv(url) {
