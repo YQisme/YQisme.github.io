@@ -311,6 +311,65 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   font-variant-numeric: tabular-nums;
   color: var(--secondary);
 }
+.posts-panel__bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 0.15rem 0.4rem;
+}
+.posts-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--theme);
+  color: var(--secondary);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.posts-sort-btn:hover {
+  color: var(--primary);
+  border-color: var(--secondary);
+  background: color-mix(in srgb, var(--tertiary) 35%, transparent);
+}
+.posts-sort-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.posts-sort-btn__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.posts-sort-btn__up,
+.posts-sort-btn__dn {
+  transition: opacity 0.2s ease;
+}
+/* 倒序（最新在前）：略强调“向上”一侧 */
+.posts-sort-btn:not(.posts-sort-btn--asc) .posts-sort-btn__up {
+  opacity: 1;
+}
+.posts-sort-btn:not(.posts-sort-btn--asc) .posts-sort-btn__dn {
+  opacity: 0.38;
+}
+/* 正序（最旧在前）：略强调“向下”一侧 */
+.posts-sort-btn--asc .posts-sort-btn__up {
+  opacity: 0.38;
+}
+.posts-sort-btn--asc .posts-sort-btn__dn {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .posts-sort-btn__up,
+  .posts-sort-btn__dn {
+    transition: none;
+  }
+}
 </style>
 
 
@@ -357,14 +416,30 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   </div>
 
   <div id="panel-latest" role="tabpanel" aria-labelledby="tab-latest" class="posts-panel">
-    <ol class="posts-list">
-      {{ range first 5 ((where site.RegularPages "Section" "posts").ByDate.Reverse) }}
-      <li>
+    <div class="posts-panel__bar">
+      <button type="button" class="posts-sort-btn" id="posts-sort-latest"
+        aria-label="按最后更新时间倒序排列，点击切换为正序"
+        title="当前：最新在前；点击后改为最旧在前">
+        <svg class="posts-sort-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <g class="posts-sort-btn__up">
+            <line x1="9" y1="17" x2="9" y2="9"></line>
+            <polyline points="7 9 9 6 11 9"></polyline>
+          </g>
+          <g class="posts-sort-btn__dn">
+            <line x1="15" y1="7" x2="15" y2="15"></line>
+            <polyline points="13 15 15 18 17 15"></polyline>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <ol id="posts-list-latest" class="posts-list">
+      {{ range first 5 ((where site.RegularPages "Section" "posts").ByLastmod.Reverse) }}
+      {{- $df := "2006-01-02" -}}
+      {{- $lm := .Lastmod -}}
+      {{- if .Lastmod.IsZero -}}{{- $lm = .Date -}}{{- end -}}
+      <li data-sort-key="{{ $lm.Unix }}">
         <a href="{{ .RelPermalink }}" class="posts-list__link">
           <span class="posts-list__title">{{ .Title }}</span>
-          {{- $df := "2006-01-02" -}}
-          {{- $lm := .Lastmod -}}
-          {{- if .Lastmod.IsZero -}}{{- $lm = .Date -}}{{- end -}}
           <time class="posts-list__date" datetime="{{ $lm.Format "2006-01-02T15:04:05Z07:00" }}" title="最后更新">{{ $lm.Format $df }}</time>
         </a>
       </li>
@@ -373,6 +448,22 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   </div>
 
   <div id="panel-hot" role="tabpanel" aria-labelledby="tab-hot" class="posts-panel" hidden>
+    <div class="posts-panel__bar">
+      <button type="button" class="posts-sort-btn" id="posts-sort-hot"
+        aria-label="按阅读量从高到低排列，点击切换为从低到高"
+        title="当前：阅读量高在前；点击后改为阅读量低在前">
+        <svg class="posts-sort-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <g class="posts-sort-btn__up">
+            <line x1="9" y1="17" x2="9" y2="9"></line>
+            <polyline points="7 9 9 6 11 9"></polyline>
+          </g>
+          <g class="posts-sort-btn__dn">
+            <line x1="15" y1="7" x2="15" y2="15"></line>
+            <polyline points="13 15 15 18 17 15"></polyline>
+          </g>
+        </svg>
+      </button>
+    </div>
     <ol id="posts-list-hot" class="posts-list" aria-live="polite">
       <li>
         <span class="posts-list__link" style="cursor: default; font-weight: 400; color: var(--secondary);">正在根据各页阅读量进行排序…</span>
@@ -383,13 +474,13 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   {{- $pvPosts := where site.RegularPages "Section" "posts" -}}
   {{- $pvRows := slice -}}
   {{- range $pvPosts -}}
-    {{- $pvRows = $pvRows | append (dict "title" .Title "url" .Permalink) -}}
+    {{- $pvRows = $pvRows | append (dict "title" .Title "url" .Permalink "rel" .RelPermalink) -}}
   {{- end -}}
   <script type="application/json" id="home-posts-pv-json">{{ $pvRows | jsonify (dict "noHTMLEscape" true) | safeJS }}</script>
   <script>
 (function () {
   /** 最热列表缓存：按访客本地「日历日」一天更新一次（过本地午夜后首次访问会重新拉取）。构建时写入的 posts JSON 仍只在 hugo build 时生成，并非每次访问生成。 */
-  var HOT_CACHE_KEY = 'home-busuanzi-hot-v1';
+  var HOT_CACHE_KEY = 'home-busuanzi-hot-v2';
 
   var ROTATE_MS = 10000;
   var tabLatest = document.getElementById('tab-latest');
@@ -415,7 +506,18 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   }
 
   function postsSignature(ps) {
-    return ps.map(function (p) { return p.url; }).sort().join('|');
+    return ps.map(function (p) { return p.rel || p.url; }).sort().join('|');
+  }
+
+  /** 与首页「最新文章」一致使用 RelPermalink，避免绝对 Permalink 与当前访问域名/尾斜杠不一致导致不蒜子 page_pv 与正文统计脱节 */
+  function resolvePostUrl(p) {
+    var rel = p.rel;
+    if (rel && typeof rel === 'string' && rel.charAt(0) === '/') {
+      try {
+        return new URL(rel, window.location.origin).href;
+      } catch (e) {}
+    }
+    return p.url;
   }
 
   function readHotCache(ps) {
@@ -443,6 +545,25 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     } catch (e) {}
   }
 
+  var hotOrderDesc = true;
+
+  function applyHotSort() {
+    var items = Array.prototype.slice.call(hotList.querySelectorAll('li'));
+    if (!items.length) return;
+    if (!items[0].getAttribute('data-sort-key')) return;
+    items.sort(function (a, b) {
+      var ka = parseInt(a.getAttribute('data-sort-key'), 10) || 0;
+      var kb = parseInt(b.getAttribute('data-sort-key'), 10) || 0;
+      if (kb !== ka) return hotOrderDesc ? kb - ka : ka - kb;
+      var ta = (a.querySelector('.posts-list__title') || {}).textContent || '';
+      var tb = (b.querySelector('.posts-list__title') || {}).textContent || '';
+      return ta.localeCompare(tb);
+    });
+    items.forEach(function (li) {
+      hotList.appendChild(li);
+    });
+  }
+
   var eyeSvg =
     '<svg class="posts-list__pv-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 
@@ -450,8 +571,9 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     hotList.innerHTML = '';
     top.forEach(function (item) {
       var li = document.createElement('li');
+      li.setAttribute('data-sort-key', String(item.pv));
       var a = document.createElement('a');
-      a.href = item.url;
+      a.href = item.rel || item.url;
       a.className = 'posts-list__link';
       var spanTitle = document.createElement('span');
       spanTitle.className = 'posts-list__title';
@@ -469,6 +591,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       li.appendChild(a);
       hotList.appendChild(li);
     });
+    applyHotSort();
   }
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -572,7 +695,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
               step();
             })
             .catch(function () {
-              results[i] = { title: items[i].title, url: items[i].url, pv: 0 };
+              results[i] = { title: items[i].title, url: items[i].url, rel: items[i].rel, pv: 0 };
               step();
             });
         }
@@ -592,8 +715,8 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     mapPool(
       posts,
       function (p) {
-        return measurePv(p.url).then(function (pv) {
-          return { title: p.title, url: p.url, pv: pv };
+        return measurePv(resolvePostUrl(p)).then(function (pv) {
+          return { title: p.title, url: p.url, rel: p.rel, pv: pv };
         });
       },
       3,
@@ -615,6 +738,55 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
         renderHotList(top);
       }
     );
+  }
+
+  var sortBtn = document.getElementById('posts-sort-latest');
+  var listLatest = document.getElementById('posts-list-latest');
+  if (sortBtn && listLatest) {
+    var latestOrderDesc = true;
+    function applyLatestSort() {
+      var items = Array.prototype.slice.call(listLatest.querySelectorAll('li'));
+      items.sort(function (a, b) {
+        var ka = parseInt(a.getAttribute('data-sort-key'), 10) || 0;
+        var kb = parseInt(b.getAttribute('data-sort-key'), 10) || 0;
+        return latestOrderDesc ? kb - ka : ka - kb;
+      });
+      items.forEach(function (li) {
+        listLatest.appendChild(li);
+      });
+    }
+    sortBtn.addEventListener('click', function () {
+      latestOrderDesc = !latestOrderDesc;
+      sortBtn.classList.toggle('posts-sort-btn--asc', !latestOrderDesc);
+      sortBtn.setAttribute(
+        'aria-label',
+        latestOrderDesc
+          ? '按最后更新时间倒序排列，点击切换为正序'
+          : '按最后更新时间正序排列，点击切换为倒序'
+      );
+      sortBtn.title = latestOrderDesc
+        ? '当前：最新在前；点击后改为最旧在前'
+        : '当前：最旧在前；点击后改为最新在前';
+      applyLatestSort();
+    });
+  }
+
+  var sortBtnHot = document.getElementById('posts-sort-hot');
+  if (sortBtnHot && hotList) {
+    sortBtnHot.addEventListener('click', function () {
+      hotOrderDesc = !hotOrderDesc;
+      sortBtnHot.classList.toggle('posts-sort-btn--asc', !hotOrderDesc);
+      sortBtnHot.setAttribute(
+        'aria-label',
+        hotOrderDesc
+          ? '按阅读量从高到低排列，点击切换为从低到高'
+          : '按阅读量从低到高排列，点击切换为从高到低'
+      );
+      sortBtnHot.title = hotOrderDesc
+        ? '当前：阅读量高在前；点击后改为阅读量低在前'
+        : '当前：阅读量低在前；点击后改为阅读量高在前';
+      applyHotSort();
+    });
   }
 })();
   </script>
