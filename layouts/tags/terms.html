@@ -1,0 +1,51 @@
+{{- define "main" }}
+{{- $css := readFile "layouts/tags/taxonomy-tags.css" -}}
+<style>{{ $css | safe.CSS }}</style>
+
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
+{{- $paginator := .Paginate $pages }}
+
+<div class="taxonomy-tags-page">
+  <header class="taxonomy-tags-page__header">
+    <div class="taxonomy-tags-page__title-row">
+      {{- if .Title }}
+      <h1 class="taxonomy-tags-page__title">{{ .Title }}</h1>
+      {{- end }}
+      <a class="taxonomy-tags-page__categories-btn" href="{{ "categories/" | relLangURL }}">分类</a>
+    </div>
+    {{- if .Description }}
+    <div class="post-description taxonomy-tags-page__desc">
+      {{ .Description }}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- /* 标签在上、文章在下 */ -}}
+  <div class="taxonomy-tags-page__layout">
+    <section class="taxonomy-tags-page__tags-block" aria-label="标签列表">
+      <nav>
+        <ul class="taxonomy-tags-page__tags-nav">
+          {{- $type := .Type }}
+          {{- range .Data.Terms.Alphabetical }}
+            {{- $name := .Name }}
+            {{- $count := .Count }}
+            {{- with site.GetPage (printf "/%s/%s" $type $name) }}
+            <li>
+              <a href="{{ .Permalink }}" class="taxonomy-tags-page__tag-link">
+                <span>{{ .LinkTitle }}</span>
+                <span class="taxonomy-tags-page__count">{{ $count }}</span>
+              </a>
+            </li>
+            {{- end }}
+          {{- end }}
+        </ul>
+      </nav>
+    </section>
+    <div class="taxonomy-tags-page__posts md-content">
+      {{- partial "taxonomy_terms_posts.html" (dict "paginator" $paginator "page" .) }}
+    </div>
+  </div>
+</div>
+
+{{- end }}{{/* end main */ -}}

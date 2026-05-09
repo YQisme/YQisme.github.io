@@ -1,0 +1,134 @@
+/* 标签术语页：标签在上、文章在下 */
+.taxonomy-tags-page {
+    padding-top: clamp(20px, 4vw, 40px);
+}
+
+.taxonomy-tags-page__header {
+    margin-bottom: var(--content-gap);
+}
+
+.taxonomy-tags-page__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+}
+
+.taxonomy-tags-page__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.taxonomy-tags-page__categories-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.1s ease;
+    flex-shrink: 0;
+}
+
+.taxonomy-tags-page__categories-btn:hover {
+    background: var(--entry);
+    transform: translateY(-1px);
+}
+
+.taxonomy-tags-page__desc {
+    margin-top: 8px;
+}
+
+.taxonomy-tags-page__layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--content-gap);
+    margin-top: var(--content-gap);
+}
+
+.taxonomy-tags-page__tags-block {
+    padding: 12px;
+    border-top: 3px solid var(--tertiary);
+    border-radius: var(--radius);
+    background: var(--entry);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .taxonomy-tags-page__tags-block {
+    box-shadow: none;
+}
+
+.taxonomy-tags-page__tags-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.taxonomy-tags-page__tags-nav li {
+    margin: 0;
+}
+
+.taxonomy-tags-page__tag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: var(--content);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    background: var(--tertiary);
+    border: 1px solid var(--border);
+    transition: background 0.12s ease;
+}
+
+.taxonomy-tags-page__tag-link:hover {
+    background: var(--code-bg);
+}
+
+.taxonomy-tags-page__tag-link--all {
+    font-weight: 600;
+    border-style: dashed;
+}
+
+.taxonomy-tags-page__tag-link--current {
+    background: var(--primary);
+    color: var(--theme);
+    border-color: var(--primary);
+}
+
+.taxonomy-tags-page__tag-link--current:hover {
+    background: var(--primary);
+    filter: brightness(1.05);
+}
+
+.taxonomy-tags-page__count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.taxonomy-tags-page__posts {
+    min-width: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .taxonomy-tags-page__title-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .taxonomy-tags-page__categories-btn {
+        align-self: flex-end;
+    }
+}

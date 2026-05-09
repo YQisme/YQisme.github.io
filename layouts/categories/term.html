@@ -2,40 +2,46 @@
 {{- $css := readFile "layouts/categories/taxonomy-categories.css" -}}
 <style>{{ $css | safe.CSS }}</style>
 
-{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
-{{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true" }}
+{{- $pages := union .RegularPages .Sections }}
 {{- $paginator := .Paginate $pages }}
 
-<div class="taxonomy-categories-page">
+{{- $taxRoot := or .Parent (site.GetPage "/categories") }}
+{{- $ctx := . }}
+{{- $type := "categories" }}
+
+<div class="taxonomy-categories-page taxonomy-categories-page--term">
   <header class="taxonomy-categories-page__header">
+    {{- partial "breadcrumbs.html" . }}
     <div class="taxonomy-categories-page__title-row">
-      {{- if .Title }}
       <h1 class="taxonomy-categories-page__title">{{ .Title }}</h1>
-      {{- end }}
       <a class="taxonomy-categories-page__tags-btn" href="{{ "tags/" | relLangURL }}">标签</a>
     </div>
     {{- if .Description }}
     <div class="post-description taxonomy-categories-page__desc">
-      {{ .Description }}
+      {{ .Description | markdownify }}
     </div>
     {{- end }}
   </header>
 
-  {{- /* 文章在左、分类导航在右 */ -}}
   <div class="taxonomy-categories-page__layout taxonomy-categories-page__layout--posts-first">
     <div class="taxonomy-categories-page__main taxonomy-categories-page__posts md-content">
-      {{- partial "taxonomy_terms_posts.html" (dict "paginator" $paginator "page" .) }}
+      {{- partial "taxonomy_terms_posts.html" (dict "paginator" $paginator "page" . "termActive" true) }}
     </div>
     <aside class="taxonomy-categories-page__sidebar taxonomy-categories-page__sidebar--trail" aria-label="分类列表">
+      {{- with $taxRoot }}
       <nav>
         <ul class="taxonomy-categories-page__nav">
-          {{- $type := .Type }}
+          <li>
+            <a href="{{ "categories/" | relLangURL }}" class="taxonomy-categories-page__nav-link taxonomy-categories-page__nav-link--all">
+              <span class="taxonomy-categories-page__nav-text">全部</span>
+            </a>
+          </li>
           {{- range .Data.Terms.Alphabetical }}
             {{- $name := .Name }}
             {{- $count := .Count }}
             {{- with site.GetPage (printf "/%s/%s" $type $name) }}
             <li>
-              <a href="{{ .Permalink }}" class="taxonomy-categories-page__nav-link">
+              <a href="{{ .Permalink }}" class="taxonomy-categories-page__nav-link{{ if eq $ctx.Permalink .Permalink }} taxonomy-categories-page__nav-link--current{{ end }}">
                 <span class="taxonomy-categories-page__nav-text">{{ .LinkTitle }}</span>
                 <span class="taxonomy-categories-page__count">{{ $count }}</span>
               </a>
@@ -44,6 +50,7 @@
           {{- end }}
         </ul>
       </nav>
+      {{- end }}
     </aside>
   </div>
 </div>

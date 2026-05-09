@@ -53,6 +53,11 @@
     margin-top: var(--content-gap);
 }
 
+/* 分类页：左侧文章列表 + 右侧分类导航 */
+.taxonomy-categories-page__layout--posts-first {
+    flex-direction: row;
+}
+
 .taxonomy-categories-page__sidebar {
     flex: 0 0 220px;
     max-width: 100%;
@@ -63,6 +68,13 @@
     border-radius: var(--radius);
     background: var(--entry);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.taxonomy-categories-page__sidebar--trail {
+    border-left: none;
+    border-right: 3px solid var(--tertiary);
+    padding: 12px 12px 12px 0;
+    order: 2;
 }
 
 [data-theme="dark"] .taxonomy-categories-page__sidebar {
@@ -95,6 +107,16 @@
     background: var(--tertiary);
 }
 
+.taxonomy-categories-page__nav-link--all {
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.taxonomy-categories-page__nav-link--current {
+    background: var(--tertiary);
+    box-shadow: inset 0 0 0 1px var(--border);
+}
+
 .taxonomy-categories-page__count {
     font-size: 12px;
     font-weight: 600;
@@ -111,6 +133,13 @@
     line-height: 1.6;
 }
 
+.taxonomy-categories-page__posts {
+    color: var(--content);
+    flex: 1;
+    min-width: min(100%, 280px);
+    order: 1;
+}
+
 .taxonomy-categories-page__hint {
     margin: 0;
 }
@@ -120,11 +149,25 @@
         flex-direction: column;
     }
 
+    .taxonomy-categories-page__layout--posts-first .taxonomy-categories-page__posts {
+        order: 1;
+    }
+
+    .taxonomy-categories-page__layout--posts-first .taxonomy-categories-page__sidebar--trail {
+        order: 2;
+    }
+
     .taxonomy-categories-page__sidebar {
         flex: 1 1 auto;
         width: 100%;
         position: static;
         border-left: none;
+        border-top: 3px solid var(--tertiary);
+        padding: 12px;
+    }
+
+    .taxonomy-categories-page__sidebar--trail {
+        border-right: none;
         border-top: 3px solid var(--tertiary);
         padding: 12px;
     }
