@@ -4,6 +4,7 @@ date: 2026-05-09
 draft: false
 ---
 
+我的博客网站：[Ean7的技术博客](https://ean7.top/)
 
 
 # 要求
