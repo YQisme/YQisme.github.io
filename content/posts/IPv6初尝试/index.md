@@ -2,6 +2,8 @@
 title: "IPv6初尝试"
 date: 2026-05-09
 draft: false
+tags: ["IPv6", "家庭网络", "路由器"]
+categories: ["技术", "教程"]
 ---
 我的博客网站：[Ean7的技术博客](https://ean7.top/)
 
