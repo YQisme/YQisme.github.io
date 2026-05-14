@@ -32,7 +32,7 @@ enableGitInfo = true
   home = ["HTML", "RSS", "JSON"]
 
 [frontmatter]
-  lastmod = ["lastmod", ":git", "date"]
+  lastmod = ["lastmod", "modified", ":git", ":fileModTime", "date"]
 [[menu.main]]
   name = "博客"
   url = "/posts/"

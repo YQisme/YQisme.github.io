@@ -5,6 +5,7 @@ draft: false
 tags: ["ESP32-CAM", "ESP32", "Arduino", "OV2640", "物联网", "摄像头"]
 categories: ["技术", "教程"]
 ---
+我的博客网站：[Ean7的技术博客](https://ean7.top/)
 
 # 简介
 

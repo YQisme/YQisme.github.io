@@ -15,7 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true  # 关键：加载主题
+          submodules: true # 关键：加载主题
+          fetch-depth: 0 # 完整历史：供 git-restore-mtime 与 Hugo :git 使用
+
+      - name: Restore Git file timestamps
+        uses: chetan/git-restore-mtime-action@v2
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2

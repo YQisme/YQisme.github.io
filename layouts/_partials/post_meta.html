@@ -3,16 +3,21 @@
 {{- if not .Date.IsZero -}}
   {{- $created = .Date.Format $dateFmt -}}
 {{- end -}}
+{{- $modTime := .Lastmod -}}
+{{- if and .GitInfo (not (isset .Params "lastmod")) (or .Lastmod.IsZero (eq .Lastmod.Unix .Date.Unix)) -}}
+  {{- $modTime = .GitInfo.AuthorDate -}}
+{{- end -}}
+
 {{- $updated := "" -}}
-{{- if not .Lastmod.IsZero -}}
-  {{- $updated = .Lastmod.Format $dateFmt -}}
+{{- if not $modTime.IsZero -}}
+  {{- $updated = $modTime.Format $dateFmt -}}
 {{- end -}}
 
 {{- $lmOn := true -}}
 {{- if isset site.Params "showlastmod" -}}
   {{- $lmOn = index site.Params "showlastmod" -}}
 {{- end -}}
-{{- $showLastMod := and $lmOn (not .Lastmod.IsZero) (ne .Lastmod.Unix .Date.Unix) -}}
+{{- $showLastMod := and $lmOn (not $modTime.IsZero) (ne $modTime.Unix .Date.Unix) -}}
 
 {{- $showRT := true -}}
 {{- if isset site.Params "showreadingtime" -}}
