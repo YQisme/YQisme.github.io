@@ -27,6 +27,12 @@ enableGitInfo = true
   # 启用搜索
   fuseOpts = { isCaseSensitive = false, shouldSort = true }
 
+# 浏览器标签页图标（对应 static/images/avatar.jpg）
+[params.assets]
+  favicon = "/images/avatar.jpg"
+  favicon16x16 = "/images/avatar.jpg"
+  favicon32x32 = "/images/avatar.jpg"
+
 # 必须：启用搜索
 [outputs]
   home = ["HTML", "RSS", "JSON"]
