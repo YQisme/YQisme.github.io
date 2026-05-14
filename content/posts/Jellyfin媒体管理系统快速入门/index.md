@@ -1,7 +1,7 @@
 ---
 title: "Jellyfin媒体管理系统快速入门"
 date: 2026-05-09
-draft: false
+draft: true
 ---
 
 # 高级
