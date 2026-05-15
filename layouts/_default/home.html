@@ -482,7 +482,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
   <script>
 (function () {
   /** 最热列表缓存：按访客本地「日历日」一天更新一次（过本地午夜后首次访问会重新拉取）。构建时写入的 posts JSON 仍只在 hugo build 时生成，并非每次访问生成。 */
-  var HOT_CACHE_KEY = 'home-busuanzi-hot-v2';
+  var HOT_CACHE_KEY = 'home-busuanzi-hot-v3';
 
   var ROTATE_MS = 10000;
   var tabLatest = document.getElementById('tab-latest');
@@ -582,7 +582,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       spanTitle.textContent = item.title;
       var pvWrap = document.createElement('span');
       pvWrap.className = 'posts-list__pv-wrap';
-      pvWrap.setAttribute('title', '本文阅读量（不蒜子）');
+      pvWrap.setAttribute('title', '本文阅读量');
       pvWrap.innerHTML = eyeSvg;
       var spanPv = document.createElement('span');
       spanPv.className = 'posts-list__pv';
@@ -668,6 +668,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     });
   }
 
+  /** 隐藏 iframe 拉取不蒜子 page_pv：不等待全部图片 onload，文档可读后即轮询，避免图文较多的文章超时被判为 0 */
   function measurePv(url) {
     return new Promise(function (resolve) {
       var iframe = document.createElement('iframe');
@@ -679,36 +680,36 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
         if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
         resolve(n);
       }
-      var started = Date.now();
-      var maxWait = 16000;
-      iframe.onload = function () {
-        function poll() {
-          try {
-            var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
-            if (doc) {
-              var el = doc.getElementById('busuanzi_value_page_pv');
-              var raw = el && el.textContent ? el.textContent.trim() : '';
-              var normalized = raw.replace(/,/g, '').replace(/\s/g, '');
-              if (normalized && normalized !== '—' && /^\d+$/.test(normalized)) {
-                done(parseInt(normalized, 10));
-                return;
-              }
+      var pollStart = 0;
+      var maxWait = 20000;
+      function poll() {
+        if (settled) return;
+        if (!pollStart) pollStart = Date.now();
+        if (Date.now() - pollStart > maxWait) {
+          done(0);
+          return;
+        }
+        try {
+          var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+          if (doc && doc.readyState !== 'loading') {
+            var el = doc.getElementById('busuanzi_value_page_pv');
+            var raw = el && el.textContent ? el.textContent.trim() : '';
+            var normalized = raw.replace(/,/g, '').replace(/\s/g, '');
+            if (normalized && normalized !== '—' && /^\d+$/.test(normalized)) {
+              done(parseInt(normalized, 10));
+              return;
             }
-          } catch (err) {
-            done(0);
-            return;
           }
-          if (Date.now() - started > maxWait) {
-            done(0);
-            return;
-          }
-          requestAnimationFrame(poll);
+        } catch (err) {
+          done(0);
+          return;
         }
         requestAnimationFrame(poll);
-      };
+      }
       iframe.onerror = function () { done(0); };
       iframe.src = url;
       document.body.appendChild(iframe);
+      requestAnimationFrame(poll);
     });
   }
 
