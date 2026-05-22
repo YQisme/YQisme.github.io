@@ -9,10 +9,12 @@ categories: ["数码", "随笔"]
 我的博客网站：[Ean7的技术博客](https://ean7.top/)
 
 # 介绍
-
-![image-20260522103328182](./image-20260522103328182.png) 
-
-![image-20260522103352491](./image-20260522103352491.png)   
+{{< rawhtml >}}
+<div style="display: flex; gap: 1rem; align-items: flex-start;">
+  <img src="/posts/hololens2/image-20260522103328182.png" alt="image-20260522141841989" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+  <img src="/posts/hololens2/image-20260522103352491.png" alt="image-20260522142941982" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+</div>
+{{< /rawhtml >}}
 
 Microsoft HoloLens 2 是微软推出的第二代混合现实（MR）头显，主要面向工业、医疗、远程协作、数字孪生和科研领域。其核心硬件配置如下：
 
@@ -82,9 +84,12 @@ HoloLens 2 内部实际上是“一台完整ARM电脑”，可独立运行 Unity
 
 # 使用体验
 
- ![image-20260522141841989](./image-20260522141841989.png)
-
-![image-20260522142941982](./image-20260522142941982.png)  
+{{< rawhtml >}}
+<div style="display: flex; gap: 1rem; align-items: flex-start;">
+  <img src="/posts/hololens2/image-20260522141841989.png" alt="image-20260522141841989" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+  <img src="/posts/hololens2/image-20260522142941982.png" alt="image-20260522142941982" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+</div>
+{{< /rawhtml >}}
 
 1.佩戴挺方便和舒适的，重量也分布合理。
 
@@ -92,12 +97,12 @@ HoloLens 2 内部实际上是“一台完整ARM电脑”，可独立运行 Unity
 
 3.进入菜单栏后，可以看到悬空的页面，但因为视场角受限，几乎看看能看全。而且色彩很容易失真，稍微偏一下色彩就失真了。用不了一会儿眼睛感觉很累。
 
-4.透视效果肯定比quest3要好，但因为透过好几层玻璃，所以清晰度有降低。不过有翻盖，可以很方便翻起来
+4.透视效果肯定比quest3要好，但因为透过好几层玻璃，所以清晰度有降低。不过有翻盖，可以很方便翻起来。
 
 5.手势追踪有延迟，经常不能一次就点对目标位置，比quest3差很多。
 
 6.空间定位挺厉害的，没想到19年的产品就能达到这样好的效果了，看来内置算力挺高。
 
-7.瞳孔解锁和眼动追踪挺有意思的
+7.瞳孔解锁和眼动追踪挺有意思的。
 
-8.空间扫描也不错，能看到手指的光标能准确吸附在实景额度表面
+8.空间扫描也不错，能看到手指的光标能准确吸附在实景的表面。
