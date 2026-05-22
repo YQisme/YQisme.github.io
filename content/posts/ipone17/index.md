@@ -1,6 +1,7 @@
 ---
 title: "iphone初体验"
 date: 2026-05-14
+lastmod: 2026-05-14
 draft: false
 tags: ["iPhone 17", "iOS", "Apple"]
 categories: ["数码", "随笔"]

@@ -1,6 +1,7 @@
 ---
 title: "初见Hugo"
 date: 2026-05-06
+lastmod: 2026-05-07
 draft: false
 tags: ["Hugo", "PaperMod", "静态网站", "Markdown", "博客", "GitHub Pages", "Vercel"]
 categories: ["技术", "教程"]

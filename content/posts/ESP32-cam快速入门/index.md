@@ -1,6 +1,7 @@
 ---
 title: "ESP32-cam快速入门"
 date: 2026-05-14
+lastmod: 2026-05-14
 draft: false
 tags: ["ESP32-CAM", "ESP32", "Arduino", "OV2640", "物联网", "摄像头"]
 categories: ["技术", "教程"]
