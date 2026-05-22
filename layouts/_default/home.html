@@ -408,7 +408,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 </section>
 
 
-<!-- ===== 最新文章 / 最热文章（不蒜子 page_pv，iframe 读取各文 PV 后排序） ===== -->
+<!-- ===== 最新文章 / 最热文章（data/postpageviews.json，由 scripts/fetch-post-pv.mjs 拉取） ===== -->
 <section class="posts" aria-label="文章列表">
 
   <div class="posts-head" role="tablist" aria-label="最新与最热切换">
@@ -466,86 +466,47 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
         </svg>
       </button>
     </div>
+    {{- $pvMap := dict -}}
+    {{- with site.Data.postpageviews -}}
+      {{- range .items -}}
+        {{- $pvMap = merge $pvMap (dict .permalink .pv) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $hotRows := slice -}}
+    {{- range where site.RegularPages "Section" "posts" -}}
+      {{- $pv := index $pvMap .Permalink | default 0 -}}
+      {{- $hotRows = $hotRows | append (dict "page" . "pv" $pv) -}}
+    {{- end -}}
+    {{- $hotSorted := sort $hotRows "pv" "desc" -}}
     <ol id="posts-list-hot" class="posts-list" aria-live="polite">
-      <li>
-        <span class="posts-list__link" style="cursor: default; font-weight: 400; color: var(--secondary);">正在根据各页阅读量进行排序…</span>
+      {{- range first 5 $hotSorted }}
+      {{- $p := .page -}}
+      <li data-sort-key="{{ .pv }}">
+        <a href="{{ $p.RelPermalink }}" class="posts-list__link">
+          <span class="posts-list__title">{{ $p.Title }}</span>
+          <span class="posts-list__pv-wrap" title="本文阅读量">
+            <svg class="posts-list__pv-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span class="posts-list__pv">{{ .pv }}</span>
+          </span>
+        </a>
       </li>
+      {{- else -}}
+      <li>
+        <span class="posts-list__link" style="cursor: default; font-weight: 400; color: var(--secondary);">暂无文章</span>
+      </li>
+      {{- end -}}
     </ol>
   </div>
 
-  {{- $pvPosts := where site.RegularPages "Section" "posts" -}}
-  {{- $pvRows := slice -}}
-  {{- range $pvPosts -}}
-    {{- $pvRows = $pvRows | append (dict "title" .Title "url" .Permalink "rel" .RelPermalink) -}}
-  {{- end -}}
-  <script type="application/json" id="home-posts-pv-json">{{ $pvRows | jsonify (dict "noHTMLEscape" true) | safeJS }}</script>
   <script>
 (function () {
-  /** 最热列表缓存：按访客本地「日历日」一天更新一次（过本地午夜后首次访问会重新拉取）。构建时写入的 posts JSON 仍只在 hugo build 时生成，并非每次访问生成。 */
-  var HOT_CACHE_KEY = 'home-busuanzi-hot-v3';
-
   var ROTATE_MS = 10000;
   var tabLatest = document.getElementById('tab-latest');
   var tabHot = document.getElementById('tab-hot');
   var panelLatest = document.getElementById('panel-latest');
   var panelHot = document.getElementById('panel-hot');
   var hotList = document.getElementById('posts-list-hot');
-  var jsonEl = document.getElementById('home-posts-pv-json');
-  if (!tabLatest || !tabHot || !panelLatest || !panelHot || !hotList || !jsonEl) return;
-
-  var posts = [];
-  try {
-    posts = JSON.parse(jsonEl.textContent || '[]');
-  } catch (e) {
-    posts = [];
-  }
-
-  function localCalendarDay() {
-    var d = new Date();
-    var m = ('0' + (d.getMonth() + 1)).slice(-2);
-    var day = ('0' + d.getDate()).slice(-2);
-    return d.getFullYear() + '-' + m + '-' + day;
-  }
-
-  function postsSignature(ps) {
-    return ps.map(function (p) { return p.rel || p.url; }).sort().join('|');
-  }
-
-  /** 与首页「最新文章」一致使用 RelPermalink，避免绝对 Permalink 与当前访问域名/尾斜杠不一致导致不蒜子 page_pv 与正文统计脱节 */
-  function resolvePostUrl(p) {
-    var rel = p.rel;
-    if (rel && typeof rel === 'string' && rel.charAt(0) === '/') {
-      try {
-        return new URL(rel, window.location.origin).href;
-      } catch (e) {}
-    }
-    return p.url;
-  }
-
-  function readHotCache(ps) {
-    try {
-      var raw = localStorage.getItem(HOT_CACHE_KEY);
-      if (!raw) return null;
-      var o = JSON.parse(raw);
-      if (o.v !== 1 || !o.day || !Array.isArray(o.top)) return null;
-      if (o.day !== localCalendarDay()) return null;
-      if (o.sig !== postsSignature(ps)) return null;
-      return o.top;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function writeHotCache(ps, top) {
-    try {
-      localStorage.setItem(HOT_CACHE_KEY, JSON.stringify({
-        v: 1,
-        day: localCalendarDay(),
-        sig: postsSignature(ps),
-        top: top
-      }));
-    } catch (e) {}
-  }
+  if (!tabLatest || !tabHot || !panelLatest || !panelHot || !hotList) return;
 
   var hotOrderDesc = true;
 
@@ -564,36 +525,6 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     items.forEach(function (li) {
       hotList.appendChild(li);
     });
-  }
-
-  var eyeSvg =
-    '<svg class="posts-list__pv-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-
-  function renderHotList(top) {
-    hotList.innerHTML = '';
-    top.forEach(function (item) {
-      var li = document.createElement('li');
-      li.setAttribute('data-sort-key', String(item.pv));
-      var a = document.createElement('a');
-      a.href = item.rel || item.url;
-      a.className = 'posts-list__link';
-      var spanTitle = document.createElement('span');
-      spanTitle.className = 'posts-list__title';
-      spanTitle.textContent = item.title;
-      var pvWrap = document.createElement('span');
-      pvWrap.className = 'posts-list__pv-wrap';
-      pvWrap.setAttribute('title', '本文阅读量');
-      pvWrap.innerHTML = eyeSvg;
-      var spanPv = document.createElement('span');
-      spanPv.className = 'posts-list__pv';
-      spanPv.textContent = String(item.pv);
-      pvWrap.appendChild(spanPv);
-      a.appendChild(spanTitle);
-      a.appendChild(pvWrap);
-      li.appendChild(a);
-      hotList.appendChild(li);
-    });
-    applyHotSort();
   }
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -666,113 +597,6 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
         resetRotate();
       }
     });
-  }
-
-  /** 隐藏 iframe 拉取不蒜子 page_pv：不等待全部图片 onload，文档可读后即轮询，避免图文较多的文章超时被判为 0 */
-  function measurePv(url) {
-    return new Promise(function (resolve) {
-      var iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;left:0;top:0;opacity:0;pointer-events:none;visibility:hidden';
-      var settled = false;
-      function done(n) {
-        if (settled) return;
-        settled = true;
-        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-        resolve(n);
-      }
-      var pollStart = 0;
-      var maxWait = 20000;
-      function poll() {
-        if (settled) return;
-        if (!pollStart) pollStart = Date.now();
-        if (Date.now() - pollStart > maxWait) {
-          done(0);
-          return;
-        }
-        try {
-          var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
-          if (doc && doc.readyState !== 'loading') {
-            var el = doc.getElementById('busuanzi_value_page_pv');
-            var raw = el && el.textContent ? el.textContent.trim() : '';
-            var normalized = raw.replace(/,/g, '').replace(/\s/g, '');
-            if (normalized && normalized !== '—' && /^\d+$/.test(normalized)) {
-              done(parseInt(normalized, 10));
-              return;
-            }
-          }
-        } catch (err) {
-          done(0);
-          return;
-        }
-        requestAnimationFrame(poll);
-      }
-      iframe.onerror = function () { done(0); };
-      iframe.src = url;
-      document.body.appendChild(iframe);
-      requestAnimationFrame(poll);
-    });
-  }
-
-  function mapPool(items, mapper, concurrency, cb) {
-    var results = new Array(items.length);
-    var nextIndex = 0;
-    function worker() {
-      return new Promise(function (resolveWorker) {
-        function step() {
-          var i = nextIndex++;
-          if (i >= items.length) {
-            resolveWorker();
-            return;
-          }
-          Promise.resolve(mapper(items[i], i))
-            .then(function (val) {
-              results[i] = val;
-              step();
-            })
-            .catch(function () {
-              results[i] = { title: items[i].title, url: items[i].url, rel: items[i].rel, pv: 0 };
-              step();
-            });
-        }
-        step();
-      });
-    }
-    var n = Math.min(concurrency, Math.max(1, items.length));
-    Promise.all(Array.from({ length: n }, worker))
-      .then(function () { cb(null, results); })
-      .catch(function (e) { cb(e); });
-  }
-
-  var cachedTop = readHotCache(posts);
-  if (cachedTop && cachedTop.length) {
-    renderHotList(cachedTop);
-  } else {
-    mapPool(
-      posts,
-      function (p) {
-        return measurePv(resolvePostUrl(p)).then(function (pv) {
-          return { title: p.title, url: p.url, rel: p.rel, pv: pv };
-        });
-      },
-      3,
-      function (err, enriched) {
-        if (err || !enriched) {
-          hotList.innerHTML = '<li><span class="posts-list__link" style="cursor:default;font-weight:400;color:var(--secondary);">阅读量加载失败</span></li>';
-          return;
-        }
-        if (!enriched.length) {
-          hotList.innerHTML = '<li><span class="posts-list__link" style="cursor:default;font-weight:400;color:var(--secondary);">暂无文章</span></li>';
-          return;
-        }
-        enriched.sort(function (a, b) {
-          if (b.pv !== a.pv) return b.pv - a.pv;
-          return (a.title > b.title) ? 1 : (a.title < b.title ? -1 : 0);
-        });
-        var top = enriched.slice(0, 5);
-        writeHotCache(posts, top);
-        renderHotList(top);
-      }
-    );
   }
 
   var sortBtn = document.getElementById('posts-sort-latest');
