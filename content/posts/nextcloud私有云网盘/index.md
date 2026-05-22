@@ -1,7 +1,7 @@
 ---
 title: "nextcloud"
 date: 2026-05-22
-draft: false
+draft: true
 tags: []
 categories: []
 ---
