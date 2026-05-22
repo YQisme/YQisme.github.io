@@ -10,9 +10,12 @@ categories: ["数码", "随笔"]
 
 # 介绍
 
-![image-20260522103328182](./image-20260522103328182.png) 
-
-![image-20260522103352491](./image-20260522103352491.png)   
+{{< rawhtml >}}
+<div style="display: flex; gap: 1rem; align-items: flex-start;">
+  <img src="/posts/hololens2/image-20260522103328182.png" alt="image-20260522103328182" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+  <img src="/posts/hololens2/image-20260522103352491.png" alt="image-20260522103352491" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+</div>
+{{< /rawhtml >}}
 
 Microsoft HoloLens 2 是微软推出的第二代混合现实（MR）头显，主要面向工业、医疗、远程协作、数字孪生和科研领域。其核心硬件配置如下：
 
@@ -82,7 +85,12 @@ HoloLens 2 内部实际上是“一台完整ARM电脑”，可独立运行 Unity
 
 # 使用体验
 
-![image-20260522141841989](./image-20260522141841989.png) 
+{{< rawhtml >}}
+<div style="display: flex; gap: 1rem; align-items: flex-start;">
+  <img src="/posts/hololens2/image-20260522141841989.png" alt="image-20260522141841989" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+  <img src="/posts/hololens2/image-20260522142941982.png" alt="image-20260522142941982" style="flex: 1; min-width: 0; width: 50%; height: auto;" loading="lazy">
+</div>
+{{< /rawhtml >}}
 
 1.佩戴挺方便和舒适的，重量也分布合理。
 
