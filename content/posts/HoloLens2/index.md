@@ -1,5 +1,5 @@
 ---
-title: "HoloLens2"
+title: "HoloLens 2 初体验"
 date: 2026-05-22
 draft: false
 tags: ["HoloLens 2", "混合现实", "MR", "Microsoft", "头显", "Quest 3"]
