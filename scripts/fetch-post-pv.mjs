@@ -7,7 +7,7 @@
  *   node scripts/fetch-post-pv.mjs
  *
  * 依赖：Node.js 18+、已安装 hugo 且能在 PATH 中执行。
- * HTTP 503 时若已有 data/postpageviews.json，则沿用该文上次的 pv。
+ * 拉取失败或返回 0 时，若已有 data/postpageviews.json 中该文的有效 pv，则沿用上次值。
  */
 
 import { execSync } from 'node:child_process';
@@ -96,28 +96,93 @@ class BusuanziHttpError extends Error {
   }
 }
 
-/** @returns {Map<string, number>} permalink / rel → 上次 pv */
-function loadPreviousPvMap() {
+/** @returns {{ map: Map<string, number>, updatedAt: string | null }} */
+function loadPreviousData() {
   const map = new Map();
-  if (!existsSync(OUT_FILE)) return map;
+  let updatedAt = null;
+  if (!existsSync(OUT_FILE)) return { map, updatedAt };
   try {
     const data = JSON.parse(readFileSync(OUT_FILE, 'utf8'));
+    updatedAt = data.updatedAt || null;
     for (const item of data.items || []) {
       const pv = Number(item.pv);
-      if (!Number.isFinite(pv)) continue;
+      if (!Number.isFinite(pv) || pv <= 0) continue;
       if (item.permalink) map.set(item.permalink, pv);
       if (item.rel) map.set(item.rel, pv);
     }
   } catch {
-    console.warn(`无法读取上次数据 ${OUT_FILE}，503 时将无法回退`);
+    console.warn(`无法读取上次数据 ${OUT_FILE}，失败时将无法回退`);
   }
-  return map;
+  return { map, updatedAt };
+}
+
+/** @param {number | undefined} prev @param {number} next */
+function formatDelta(prev, next) {
+  if (prev === undefined) return '新';
+  const d = next - prev;
+  if (d === 0) return '=';
+  if (d > 0) return `+${d}`;
+  return String(d);
+}
+
+/** @param {number | undefined} prev @param {number} next */
+function formatPvCompare(prev, next) {
+  if (prev === undefined) return `${next} (新)`;
+  const delta = formatDelta(prev, next);
+  if (delta === '=') return `${prev} → ${next} (=)`;
+  return `${prev} → ${next} (${delta})`;
+}
+
+/** @param {string | null} previousUpdatedAt @param {Map<string, number>} previousPv @param {{ title: string, permalink: string, rel: string, pv: number }[]} items */
+function printComparisonSummary(previousUpdatedAt, previousPv, items) {
+  console.log('\n=== 阅读量对比 ===');
+  console.log(`上次更新: ${previousUpdatedAt || '（无历史数据）'}`);
+  console.log(`本次更新: ${new Date().toISOString()}`);
+  console.log('');
+
+  const titleWidth = Math.max(4, ...items.map((i) => i.title.length));
+  const head = `${'标题'.padEnd(titleWidth)}  上次    最新    变化`;
+  console.log(head);
+  console.log('-'.repeat(head.length));
+
+  let totalPrev = 0;
+  let totalNew = 0;
+  let hasPrev = false;
+
+  for (const item of items) {
+    const prev = lookupPreviousPv(previousPv, item.permalink, item.rel);
+    const prevStr = prev === undefined ? '—' : String(prev);
+    const delta = formatDelta(prev, item.pv);
+    if (prev !== undefined) {
+      totalPrev += prev;
+      hasPrev = true;
+    }
+    totalNew += item.pv;
+    console.log(
+      `${item.title.padEnd(titleWidth)}  ${prevStr.padStart(4)}  ${String(item.pv).padStart(4)}  ${delta}`
+    );
+  }
+
+  if (hasPrev) {
+    console.log('-'.repeat(head.length));
+    const totalDelta = formatDelta(totalPrev, totalNew);
+    console.log(
+      `${'合计'.padEnd(titleWidth)}  ${String(totalPrev).padStart(4)}  ${String(totalNew).padStart(4)}  ${totalDelta}`
+    );
+  }
 }
 
 function lookupPreviousPv(previous, permalink, rel) {
   if (previous.has(permalink)) return previous.get(permalink);
   if (rel && previous.has(rel)) return previous.get(rel);
   return undefined;
+}
+
+/** 拉取失败或结果为 0 时，若有有效上次 pv 则沿用，不允许覆盖为 0 */
+function resolvePv(fetched, prevPv) {
+  if (Number.isFinite(fetched) && fetched > 0) return fetched;
+  if (prevPv !== undefined && prevPv > 0) return prevPv;
+  return Number.isFinite(fetched) ? fetched : 0;
 }
 
 async function fetchPagePv(permalink) {
@@ -149,35 +214,40 @@ async function mapPool(items, mapper, concurrency) {
 
 async function main() {
   const baseURL = parseBaseURL();
-  const previousPv = loadPreviousPvMap();
+  const { map: previousPv, updatedAt: previousUpdatedAt } = loadPreviousData();
   const posts = listPostsFromHugo();
   if (!posts.length) {
     console.warn('未找到已发布的 posts 文章');
   }
   console.log(`拉取 ${posts.length} 篇文章阅读量（Referer → 不蒜子）…`);
   if (previousPv.size) {
-    console.log(`已加载上次 ${OUT_FILE}，HTTP 503 时将沿用对应 pv`);
+    console.log(`已加载上次 ${OUT_FILE}（${previousUpdatedAt || '未知时间'}），失败或返回 0 时将沿用对应 pv`);
   }
 
   const items = await mapPool(
     posts,
     async (p, i) => {
       if (i > 0) await sleep(DELAY_MS);
-      let pv = 0;
+      const prevPv = lookupPreviousPv(previousPv, p.permalink, p.rel);
+      let fetched = 0;
+      let errMsg = null;
       try {
-        pv = await fetchPagePv(p.permalink);
-        console.log(`  [${i + 1}/${posts.length}] ${p.title}: ${pv}`);
+        fetched = await fetchPagePv(p.permalink);
       } catch (e) {
-        const is503 = e instanceof BusuanziHttpError && e.status === 503;
-        const prev = is503 ? lookupPreviousPv(previousPv, p.permalink, p.rel) : undefined;
-        if (is503 && prev !== undefined) {
-          pv = prev;
-          console.warn(
-            `  [${i + 1}/${posts.length}] ${p.title}: 失败 (HTTP 503)，沿用上次 pv=${pv}`
-          );
+        errMsg = e.message;
+      }
+      const pv = resolvePv(fetched, prevPv);
+      const tag = `[${i + 1}/${posts.length}] ${p.title}:`;
+      if (errMsg) {
+        if (pv > 0 && pv !== fetched) {
+          console.warn(`  ${tag} 失败 (${errMsg})，沿用上次 ${formatPvCompare(prevPv, pv)}`);
         } else {
-          console.warn(`  [${i + 1}/${posts.length}] ${p.title}: 失败 (${e.message})`);
+          console.warn(`  ${tag} 失败 (${errMsg})`);
         }
+      } else if (fetched === 0 && pv > 0) {
+        console.warn(`  ${tag} 返回 0，沿用上次 ${formatPvCompare(prevPv, pv)}`);
+      } else {
+        console.log(`  ${tag} ${formatPvCompare(prevPv, pv)}`);
       }
       return {
         rel: p.rel,
@@ -190,6 +260,8 @@ async function main() {
   );
 
   items.sort((a, b) => b.pv - a.pv || a.title.localeCompare(b.title, 'zh'));
+
+  printComparisonSummary(previousUpdatedAt, previousPv, items);
 
   const payload = {
     updatedAt: new Date().toISOString(),
