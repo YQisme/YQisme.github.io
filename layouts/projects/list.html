@@ -21,11 +21,12 @@
 
         <a href="{{ .RelPermalink }}">
 
-          {{ with .Params.image }}
+          {{- $page := . -}}
+          {{- with $page.Params.image | default $page.Params.cover.image }}
           <div style="height:180px; overflow:hidden;">
-            <img src="{{ . }}" style="width:100%; object-fit:cover;">
+            {{- partial "project_thumb.html" $page -}}
           </div>
-          {{ end }}
+          {{- end }}
 
           <div style="padding:16px;">
             <h2 style="margin:0 0 8px;">

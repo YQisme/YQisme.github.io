@@ -1,0 +1,21 @@
+{{- $imgParam := .Params.image | default .Params.cover.image -}}
+{{- with $imgParam -}}
+  {{- $name := strings.TrimPrefix "./" . -}}
+  {{- $bundleImg := ($.Resources.ByType "image").GetMatch (printf "*%s*" $name) -}}
+  {{- $src := "" -}}
+  {{- if $bundleImg -}}
+    {{- $src = $bundleImg.RelPermalink -}}
+  {{- else -}}
+    {{- $u := urls.Parse . -}}
+    {{- if and $u (not $u.IsAbs) -}}
+      {{- if hasPrefix . "/" -}}
+        {{- $src = . | relURL -}}
+      {{- else -}}
+        {{- $src = path.Join $.RelPermalink $name | relURL -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $src = . | absURL -}}
+    {{- end -}}
+  {{- end -}}
+  <img src="{{ $src }}" alt="{{ $.Title }}" loading="lazy" style="width:100%; object-fit:cover;">
+{{- end -}}

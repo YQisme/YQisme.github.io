@@ -4,7 +4,7 @@
 
 ## 站点特性
 
-- 博客文章、分类、标签、项目展示、关于页
+- 博客文章、分类、标签、**项目展示**（列表 + 详情封面）、关于页
 - 全文搜索（Fuse.js，需 Hugo Extended 且 `outputs.home` 含 `JSON`）
 - 深色 / 浅色主题跟随系统（`defaultTheme = "auto"`）
 - 文章目录、字数、阅读时间、上下篇导航、分享按钮
@@ -70,11 +70,18 @@ hugo --minify
 ```text
 content/posts/我的文章/
 ├── index.md
-├── cover.png          # 可选
+├── cover.png          # 可选，需在 front matter 中声明 cover.image
 └── screenshot-1.png
 ```
 
 Hugo 会将包内资源发布到文章 URL 路径下（如 `/posts/我的文章/`）。文件夹名中的中文、空格会按规则转成 URL（如 `HoloLens2` → `/posts/hololens2/`），本地预览时以终端或浏览器地址栏为准。
+
+**封面图**（详情页顶部大图，PaperMod 提供）在同目录放图后，于 `index.md` 中声明文件名（不要写 `./` 前缀）：
+
+```yaml
+cover:
+  image: cover.png
+```
 
 ### Front Matter 示例
 
@@ -122,6 +129,58 @@ categories: ["技术", "随笔"]
 6. 提交并推送；若已配置 GitHub Actions，等待部署完成。
 
 更详细的 Hugo 用法可参考站内文章 [`content/posts/hugo/`](content/posts/hugo/)。
+
+## 写项目
+
+项目内容放在 `content/projects/`。列表页使用自定义布局 [`layouts/projects/list.html`](layouts/projects/list.html)（网格卡片）；首页「项目」区块会展示最近 6 个项目（[`layouts/_default/home.html`](layouts/_default/home.html)）。二者通过 [`layouts/_partials/project_thumb.html`](layouts/_partials/project_thumb.html) 解析缩略图。
+
+### 推荐：Page Bundle（与博客相同）
+
+```text
+content/projects/我的项目/
+├── index.md
+└── image-20260528101948221.png
+```
+
+`index.md` 示例：
+
+```yaml
+---
+title: "我的项目"
+date: 2026-05-28
+cover:
+  image: image-20260528101948221.png
+---
+```
+
+- **详情页**：PaperMod 的 `cover.html` 读取 `cover.image`，从 page bundle 匹配图片并生成响应式封面。
+- **列表 / 首页卡片**：`project_thumb.html` 优先从 bundle 取图；若无 bundle，则把 `cover.image` 或旧字段 `image` 拼到该页 `RelPermalink` 下。
+
+只需写 **`cover.image` 一次**，不必再重复 `image:`。
+
+### 单文件 + 站点静态图（旧写法仍可用）
+
+```text
+content/projects/proj1.md
+static/images/demo.jpg
+```
+
+```yaml
+---
+title: "工业 IoT 平台"
+date: 2026-05-06
+image: "/images/demo.jpg"
+---
+```
+
+`image` 为以 `/` 开头的站点根路径时，列表与首页直接使用该 URL。新项目更推荐 bundle + `cover.image`。
+
+### 发布新项目建议流程
+
+1. 在 `content/projects/` 新建目录，编写 `index.md`，封面与配图放在同目录。
+2. `hugo server --buildDrafts` 检查 `/projects/` 列表卡片与项目详情页封面。
+3. 确认 `content/projects/_index.md` 的 `layout: "projects"` 未被改动（用于列表布局）。
+4. 提交并推送。
 
 ## 更新文章阅读量
 
@@ -185,7 +244,8 @@ node scripts/fetch-post-pv.mjs
 | 路径 | 说明 |
 |------|------|
 | `content/posts/` | 博客文章（建议每篇一个子目录 + `index.md`） |
-| `content/projects/` | 项目页 |
+| `content/projects/` | 项目页（子目录 + `index.md` 为 bundle；亦支持单文件 `.md`） |
+| `content/projects/_index.md` | 项目列表页（`layout: projects`） |
 | `content/about/` | 关于页 |
 | `content/categories/`、`content/tags/` | 分类 / 标签列表页 |
 | `content/search.md` | 搜索页 |
@@ -207,7 +267,8 @@ node scripts/fetch-post-pv.mjs
 | `layouts/_partials/extend_head.html` | 额外 CSS / 脚本 |
 | `layouts/_partials/post_meta.html` | 文章元信息与不蒜子阅读量 |
 | `layouts/_partials/footer.html` | 页脚与站点统计 |
-| `layouts/projects/list.html` | 项目列表 |
+| `layouts/projects/list.html` | 项目列表（网格卡片） |
+| `layouts/_partials/project_thumb.html` | 项目列表 / 首页项目卡片缩略图（bundle、`cover.image`、`image`） |
 | `layouts/categories/`、`layouts/tags/` | 分类 / 标签页样式 |
 
 修改主题默认行为时，优先在 `layouts/` 覆盖，避免直接改 `themes/PaperMod`（子模块更新会覆盖本地改动）。
@@ -218,9 +279,12 @@ node scripts/fetch-post-pv.mjs
 |------|------|
 | 本地写了 `<div>` / `<img>` 但页面上没有图 | Hugo 默认省略裸 HTML；改用 `{{< rawhtml >}}` 或 Markdown 图片语法 |
 | 并排图 `src` 用 `./xxx.png` 不显示 | 在 `rawhtml` 内改用 `/posts/<slug>/xxx.png` 绝对路径 |
+| 项目 / 文章封面不显示 | 详情页用 `cover.image`（不是顶层 `image`）；bundle 内只写文件名，勿用 `./`；列表依赖 `project_thumb.html`，需 Extended 构建 |
+| 项目列表有图、详情无封面 | 只写了 `image` 未写 `cover.image` 时，补上 `cover:` 块 |
 | 首页最热文章为空或很旧 | 运行 `node scripts/fetch-post-pv.mjs` 并提交 `data/postpageviews.json` |
 | 推送后未自动部署 | 确认工作流在 `.github/workflows/`，且 Pages 源为 `gh-pages` |
 | 子模块 / 主题缺失 | `git submodule update --init --recursive` |
+| `resources/_gen/` 被提交或冲突 | 为 Hugo 生成的图片缓存，建议加入 `.gitignore`，本地构建会自动再生 |
 
 ## 许可证
 

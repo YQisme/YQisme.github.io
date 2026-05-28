@@ -664,9 +664,10 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 
         <div class="card">
 
-          {{ with .Params.image }}
-          <img src="{{ . }}">
-          {{ end }}
+          {{- $page := . -}}
+          {{- with $page.Params.image | default $page.Params.cover.image }}
+          {{- partial "project_thumb.html" $page -}}
+          {{- end }}
 
           <div class="card-content">
             <h3>{{ .Title }}</h3>
