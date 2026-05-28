@@ -88,35 +88,76 @@
 .projects {
   max-width: 1000px;
   margin: 60px auto;
+  padding: 0 20px;
 }
 
-.grid {
+.projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
 }
 
-.card {
+.project-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.project-card-link .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #eee;
-  transition: 0.2s;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--entry);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover {
+.project-card-link:hover .card {
   transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.card img {
-  width: 100%;
+.card-cover {
   height: 180px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--tertiary);
+}
+
+.card-cover img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .card-content {
   padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-content h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--primary);
+}
+
+.card-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ===== 最新文章（有序列表 + 序号徽标）===== */
@@ -656,26 +697,29 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 <section class="projects">
   <h2 style="text-align:center;">🚀 项目精选</h2>
 
-  <div class="grid">
+  <div class="projects-grid">
 
     {{ range first 6 (where site.RegularPages "Section" "projects") }}
 
-      <a href="{{ .RelPermalink }}">
-
-        <div class="card">
-
-          {{- $page := . -}}
+      {{- $page := . -}}
+      <a class="project-card-link" href="{{ $page.RelPermalink }}">
+        <article class="card">
           {{- with $page.Params.image | default $page.Params.cover.image }}
-          {{- partial "project_thumb.html" $page -}}
-          {{- end }}
-
-          <div class="card-content">
-            <h3>{{ .Title }}</h3>
-            <p>{{ .Summary | truncate 80 }}</p>
+          <div class="card-cover">
+            {{- partial "project_thumb.html" $page -}}
           </div>
-
-        </div>
-
+          {{- end }}
+          <div class="card-content">
+            <h3>{{ $page.Title }}</h3>
+            <p class="card-desc">
+              {{- with $page.Description -}}
+                {{- . | truncate 120 -}}
+              {{- else -}}
+                {{- $page.Summary | plainify | truncate 120 -}}
+              {{- end -}}
+            </p>
+          </div>
+        </article>
       </a>
 
     {{ end }}

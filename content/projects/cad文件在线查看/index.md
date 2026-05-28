@@ -1,6 +1,7 @@
 ---
 title: "cad文件在线查看"
 date: 2026-05-28
+description: "基于 ezdxf + FastAPI + Vue 3 的 DXF 在线预览，支持图层与块显示/隐藏，无需安装 AutoCAD。"
 cover:
   image: image-20260528101948221.png
 ---

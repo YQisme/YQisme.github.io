@@ -23,7 +23,7 @@
 
           {{- $page := . -}}
           {{- with $page.Params.image | default $page.Params.cover.image }}
-          <div style="height:180px; overflow:hidden;">
+          <div style="height:180px; overflow:hidden; background:var(--tertiary);">
             {{- partial "project_thumb.html" $page -}}
           </div>
           {{- end }}
@@ -33,8 +33,12 @@
               {{ .Title }}
             </h2>
 
-            <p style="color:#666; font-size:14px;">
-              {{ .Summary | truncate 80 }}
+            <p style="color:var(--secondary); font-size:14px; line-height:1.5; margin:0;">
+              {{- with .Description -}}
+                {{- . | truncate 80 -}}
+              {{- else -}}
+                {{- .Summary | plainify | truncate 80 -}}
+              {{- end -}}
             </p>
 
           </div>

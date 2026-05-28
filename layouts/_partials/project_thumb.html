@@ -17,5 +17,5 @@
       {{- $src = . | absURL -}}
     {{- end -}}
   {{- end -}}
-  <img src="{{ $src }}" alt="{{ $.Title }}" loading="lazy" style="width:100%; object-fit:cover;">
+  <img src="{{ $src }}" alt="{{ $.Title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
 {{- end -}}
