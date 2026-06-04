@@ -1,24 +1,24 @@
 {
-  "updatedAt": "2026-06-02T01:16:10.329Z",
+  "updatedAt": "2026-06-04T03:09:18.096Z",
   "baseURL": "https://ean7.top/",
   "items": [
     {
       "rel": "/posts/hugo/",
       "permalink": "https://ean7.top/posts/hugo/",
       "title": "初见Hugo",
-      "pv": 119
+      "pv": 120
     },
     {
       "rel": "/posts/hello/",
       "permalink": "https://ean7.top/posts/hello/",
       "title": "Hello PaperMod",
-      "pv": 107
+      "pv": 108
     },
     {
       "rel": "/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "permalink": "https://ean7.top/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "title": "IPv6初尝试",
-      "pv": 98
+      "pv": 99
     },
     {
       "rel": "/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
@@ -30,25 +30,25 @@
       "rel": "/posts/ipone17/",
       "permalink": "https://ean7.top/posts/ipone17/",
       "title": "iphone初体验",
-      "pv": 50
+      "pv": 51
     },
     {
       "rel": "/posts/hololens2/",
       "permalink": "https://ean7.top/posts/hololens2/",
       "title": "HoloLens 2 初体验",
-      "pv": 30
+      "pv": 31
     },
     {
       "rel": "/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "title": "AI边缘盒子",
-      "pv": 1
+      "pv": 4
     },
     {
       "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
       "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
       "title": "服务器验机流程",
-      "pv": 0
+      "pv": 1
     }
   ]
 }
