@@ -476,7 +476,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       </button>
     </div>
     <ol id="posts-list-latest" class="posts-list">
-      {{ range first 5 ((where site.RegularPages "Section" "posts").ByLastmod.Reverse) }}
+      {{ range (where site.RegularPages "Section" "posts").ByLastmod.Reverse }}
       {{- $df := "2006-01-02" -}}
       {{- $lm := .Lastmod -}}
       {{- if .Lastmod.IsZero -}}{{- $lm = .Date -}}{{- end -}}
@@ -520,7 +520,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
     {{- end -}}
     {{- $hotSorted := sort $hotRows "pv" "desc" -}}
     <ol id="posts-list-hot" class="posts-list" aria-live="polite">
-      {{- range first 5 $hotSorted }}
+      {{- range $hotSorted }}
       {{- $p := .page -}}
       <li data-sort-key="{{ .pv }}">
         <a href="{{ $p.RelPermalink }}" class="posts-list__link">
