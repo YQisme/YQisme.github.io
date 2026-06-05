@@ -182,6 +182,10 @@
 .posts-list li + li {
   border-top: 1px solid var(--border);
 }
+/* 首页列表：参与排序的是全部文章，仅展示前 5 条 */
+.posts-panel .posts-list li:nth-child(n+6) {
+  display: none;
+}
 .posts-list__link {
   display: flex;
   align-items: center;
