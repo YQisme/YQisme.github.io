@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-06-04T05:50:17.513Z",
+  "updatedAt": "2026-06-08T12:08:05.808Z",
   "baseURL": "https://ean7.top/",
   "items": [
     {
       "rel": "/posts/hugo/",
       "permalink": "https://ean7.top/posts/hugo/",
       "title": "初见Hugo",
-      "pv": 120
+      "pv": 122
     },
     {
       "rel": "/posts/hello/",
       "permalink": "https://ean7.top/posts/hello/",
       "title": "Hello PaperMod",
-      "pv": 109
+      "pv": 111
     },
     {
       "rel": "/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
@@ -30,7 +30,7 @@
       "rel": "/posts/ipone17/",
       "permalink": "https://ean7.top/posts/ipone17/",
       "title": "iphone初体验",
-      "pv": 52
+      "pv": 55
     },
     {
       "rel": "/posts/hololens2/",
@@ -43,6 +43,12 @@
       "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "title": "AI边缘盒子",
       "pv": 5
+    },
+    {
+      "rel": "/posts/s905l3b%E7%9B%92%E5%AD%90%E5%88%B7%E5%85%A5%E5%86%AC%E7%93%9Chaos/",
+      "permalink": "https://ean7.top/posts/s905l3b%E7%9B%92%E5%AD%90%E5%88%B7%E5%85%A5%E5%86%AC%E7%93%9Chaos/",
+      "title": "",
+      "pv": 2
     },
     {
       "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
