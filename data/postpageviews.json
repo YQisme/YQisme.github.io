@@ -1,36 +1,36 @@
 {
-  "updatedAt": "2026-06-08T12:08:05.808Z",
+  "updatedAt": "2026-06-10T05:59:30.945Z",
   "baseURL": "https://ean7.top/",
   "items": [
     {
       "rel": "/posts/hugo/",
       "permalink": "https://ean7.top/posts/hugo/",
       "title": "初见Hugo",
-      "pv": 122
+      "pv": 123
     },
     {
       "rel": "/posts/hello/",
       "permalink": "https://ean7.top/posts/hello/",
       "title": "Hello PaperMod",
-      "pv": 111
+      "pv": 112
     },
     {
       "rel": "/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "permalink": "https://ean7.top/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "title": "IPv6初尝试",
-      "pv": 100
+      "pv": 101
     },
     {
       "rel": "/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "permalink": "https://ean7.top/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "title": "ESP32-cam快速入门",
-      "pv": 72
+      "pv": 75
     },
     {
       "rel": "/posts/ipone17/",
       "permalink": "https://ean7.top/posts/ipone17/",
       "title": "iphone初体验",
-      "pv": 55
+      "pv": 56
     },
     {
       "rel": "/posts/hololens2/",
@@ -42,18 +42,18 @@
       "rel": "/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "title": "AI边缘盒子",
-      "pv": 5
-    },
-    {
-      "rel": "/posts/s905l3b%E7%9B%92%E5%AD%90%E5%88%B7%E5%85%A5%E5%86%AC%E7%93%9Chaos/",
-      "permalink": "https://ean7.top/posts/s905l3b%E7%9B%92%E5%AD%90%E5%88%B7%E5%85%A5%E5%86%AC%E7%93%9Chaos/",
-      "title": "",
-      "pv": 2
+      "pv": 9
     },
     {
       "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
       "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
       "title": "windows server服务器验机流程",
+      "pv": 3
+    },
+    {
+      "rel": "/posts/%E9%9A%8F%E8%BA%ABwifi/",
+      "permalink": "https://ean7.top/posts/%E9%9A%8F%E8%BA%ABwifi/",
+      "title": "随身wifi初体验",
       "pv": 1
     }
   ]

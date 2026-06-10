@@ -2,8 +2,8 @@
 title: "windows server服务器验机流程"
 date: 2026-05-29
 draft: false
-tags: []
-categories: []
+tags: ["Windows Server", "服务器", "硬件检测"]
+categories: ["技术", "教程"]
 ---
 
 弄来了一台windows server 2022的服务器，5400左右，配置如下
