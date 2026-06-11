@@ -8,13 +8,13 @@ categories: ["技术", "教程"]
 
 # 安装 IIS
 
-在 **Windows Server 2022** 中，点击 **“添加角色和功能”** 后，进入 **“添加角色和功能向导”**（Add Roles and Features Wizard）。
+在 **服务器管理器** 中，点击 **“添加角色和功能”** 后，进入 **“添加角色和功能向导”**（Add Roles and Features Wizard）。
 
 ### 1. 开始之前
 
 直接点击：
 
-```text
+```
 下一步
 ```
 
@@ -24,14 +24,14 @@ categories: ["技术", "教程"]
 
 选择：
 
-```text
+```
 基于角色或基于功能的安装
 (Role-based or feature-based installation)
 ```
 
 然后：
 
-```text
+```
 下一步
 ```
 
@@ -41,7 +41,7 @@ categories: ["技术", "教程"]
 
 一般选择：
 
-```text
+```
 从服务器池中选择服务器
 ```
 
@@ -49,13 +49,13 @@ categories: ["技术", "教程"]
 
 例如：
 
-```text
+```
 SERVER01
 ```
 
 点击：
 
-```text
+```
 下一步
 ```
 
@@ -65,7 +65,7 @@ SERVER01
 
 找到：
 
-```text
+```
 Web 服务器(IIS)
 ```
 
@@ -73,19 +73,19 @@ Web 服务器(IIS)
 
 此时会弹出：
 
-```text
+```
 添加 Web 服务器(IIS) 所需功能？
 ```
 
 点击：
 
-```text
+```
 添加功能
 ```
 
 然后：
 
-```text
+```
 下一步
 ```
 
@@ -97,7 +97,7 @@ Web 服务器(IIS)
 
 直接：
 
-```text
+```
 下一步
 ```
 
@@ -107,7 +107,7 @@ Web 服务器(IIS)
 
 建议勾选：
 
-```text
+```
 应用程序开发
  ├─ .NET Extensibility  4.8
  ├─ ASP.NET 4.8
@@ -119,7 +119,7 @@ Web 服务器(IIS)
 
 然后：
 
-```text
+```
 下一步
 ```
 
@@ -129,7 +129,7 @@ Web 服务器(IIS)
 
 点击：
 
-```text
+```
 安装
 ```
 
@@ -141,13 +141,13 @@ Web 服务器(IIS)
 
 安装后浏览器访问：
 
-```text
+```
 http://localhost
 ```
 
 或者：
 
-```text
+```
 http://服务器IP
 ```
 
