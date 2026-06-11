@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * 从不蒜子 API 拉取各文章 page_pv，写入 data/postpageviews.json。
+ * 从不蒜子 API 拉取站点 site_pv / site_uv 与各文章 page_pv，写入 data/postpageviews.json。
  * 首页「最热文章」在 Hugo 构建时读取该文件排序，无需浏览器实时请求。
  *
  * 用法（仓库根目录）：
  *   node scripts/fetch-post-pv.mjs
  *
  * 依赖：Node.js 18+、已安装 hugo 且能在 PATH 中执行。
- * 拉取失败或返回 0 时，若已有 data/postpageviews.json 中该文的有效 pv，则沿用上次值。
+ * 拉取失败或返回 0 时，若已有 data/postpageviews.json 中的有效值，则沿用上次记录。
  */
 
 import { execSync } from 'node:child_process';
@@ -96,14 +96,20 @@ class BusuanziHttpError extends Error {
   }
 }
 
-/** @returns {{ map: Map<string, number>, updatedAt: string | null }} */
+/** @returns {{ map: Map<string, number>, updatedAt: string | null, sitePv?: number, siteUv?: number }} */
 function loadPreviousData() {
   const map = new Map();
   let updatedAt = null;
-  if (!existsSync(OUT_FILE)) return { map, updatedAt };
+  let sitePv;
+  let siteUv;
+  if (!existsSync(OUT_FILE)) return { map, updatedAt, sitePv, siteUv };
   try {
     const data = JSON.parse(readFileSync(OUT_FILE, 'utf8'));
     updatedAt = data.updatedAt || null;
+    const prevSitePv = Number(data.site_pv);
+    const prevSiteUv = Number(data.site_uv);
+    if (Number.isFinite(prevSitePv) && prevSitePv > 0) sitePv = prevSitePv;
+    if (Number.isFinite(prevSiteUv) && prevSiteUv > 0) siteUv = prevSiteUv;
     for (const item of data.items || []) {
       const pv = Number(item.pv);
       if (!Number.isFinite(pv) || pv <= 0) continue;
@@ -113,7 +119,7 @@ function loadPreviousData() {
   } catch {
     console.warn(`无法读取上次数据 ${OUT_FILE}，失败时将无法回退`);
   }
-  return { map, updatedAt };
+  return { map, updatedAt, sitePv, siteUv };
 }
 
 /** @param {number | undefined} prev @param {number} next */
@@ -133,12 +139,16 @@ function formatPvCompare(prev, next) {
   return `${prev} → ${next} (${delta})`;
 }
 
-/** @param {string | null} previousUpdatedAt @param {Map<string, number>} previousPv @param {{ title: string, permalink: string, rel: string, pv: number }[]} items */
-function printComparisonSummary(previousUpdatedAt, previousPv, items) {
-  console.log('\n=== 阅读量对比 ===');
+/** @param {string | null} previousUpdatedAt @param {{ sitePv?: number, siteUv?: number }} previousSite @param {{ site_pv: number, site_uv: number }} site @param {Map<string, number>} previousPv @param {{ title: string, permalink: string, rel: string, pv: number }[]} items */
+function printComparisonSummary(previousUpdatedAt, previousSite, site, previousPv, items) {
+  console.log('\n=== 站点统计对比 ===');
   console.log(`上次更新: ${previousUpdatedAt || '（无历史数据）'}`);
   console.log(`本次更新: ${new Date().toISOString()}`);
   console.log('');
+  console.log(`总访问量  ${formatPvCompare(previousSite.sitePv, site.site_pv)}`);
+  console.log(`访客数    ${formatPvCompare(previousSite.siteUv, site.site_uv)}`);
+
+  console.log('\n=== 文章阅读量对比 ===');
 
   const titleWidth = Math.max(4, ...items.map((i) => i.title.length));
   const head = `${'标题'.padEnd(titleWidth)}  上次    最新    变化`;
@@ -185,15 +195,44 @@ function resolvePv(fetched, prevPv) {
   return Number.isFinite(fetched) ? fetched : 0;
 }
 
-async function fetchPagePv(permalink) {
+/** @param {string} text */
+function parseBusuanziJsonp(text) {
+  /** @param {string} key */
+  const pick = (key) => {
+    const m = text.match(new RegExp(`"${key}"\\s*:\\s*(\\d+)`));
+    return m ? parseInt(m[1], 10) : undefined;
+  };
+  return {
+    site_pv: pick('site_pv'),
+    site_uv: pick('site_uv'),
+    page_pv: pick('page_pv'),
+  };
+}
+
+async function fetchBusuanzi(permalink) {
   const res = await fetch(BUSUANZI_URL, {
     headers: { Referer: permalink, 'User-Agent': 'YQisme.github.io-fetch-post-pv/1.0' },
   });
   if (!res.ok) throw new BusuanziHttpError(res.status);
-  const text = await res.text();
-  const m = text.match(/"page_pv"\s*:\s*(\d+)/);
-  if (!m) throw new Error('JSONP 响应无效');
-  return parseInt(m[1], 10);
+  return parseBusuanziJsonp(await res.text());
+}
+
+async function fetchPagePv(permalink) {
+  const data = await fetchBusuanzi(permalink);
+  if (!Number.isFinite(data.page_pv)) throw new Error('JSONP 响应无效');
+  return data.page_pv;
+}
+
+/** @returns {{ site_pv: number, site_uv: number }} */
+async function fetchSiteStats(permalink) {
+  const data = await fetchBusuanzi(permalink);
+  if (!Number.isFinite(data.site_pv) && !Number.isFinite(data.site_uv)) {
+    throw new Error('JSONP 响应无效');
+  }
+  return {
+    site_pv: data.site_pv ?? 0,
+    site_uv: data.site_uv ?? 0,
+  };
 }
 
 async function mapPool(items, mapper, concurrency) {
@@ -214,14 +253,48 @@ async function mapPool(items, mapper, concurrency) {
 
 async function main() {
   const baseURL = parseBaseURL();
-  const { map: previousPv, updatedAt: previousUpdatedAt } = loadPreviousData();
+  const {
+    map: previousPv,
+    updatedAt: previousUpdatedAt,
+    sitePv: previousSitePv,
+    siteUv: previousSiteUv,
+  } = loadPreviousData();
   const posts = listPostsFromHugo();
   if (!posts.length) {
     console.warn('未找到已发布的 posts 文章');
   }
-  console.log(`拉取 ${posts.length} 篇文章阅读量（Referer → 不蒜子）…`);
-  if (previousPv.size) {
-    console.log(`已加载上次 ${OUT_FILE}（${previousUpdatedAt || '未知时间'}），失败或返回 0 时将沿用对应 pv`);
+
+  console.log(`拉取站点总访问量与访客数（Referer: ${baseURL}）…`);
+  let fetchedSite = { site_pv: 0, site_uv: 0 };
+  let siteErrMsg = null;
+  try {
+    fetchedSite = await fetchSiteStats(baseURL);
+  } catch (e) {
+    siteErrMsg = e.message;
+  }
+  const site_pv = resolvePv(fetchedSite.site_pv, previousSitePv);
+  const site_uv = resolvePv(fetchedSite.site_uv, previousSiteUv);
+  if (siteErrMsg) {
+    if ((site_pv > 0 && site_pv !== fetchedSite.site_pv) || (site_uv > 0 && site_uv !== fetchedSite.site_uv)) {
+      console.warn(
+        `  站点统计失败 (${siteErrMsg})，沿用上次 总访问量 ${formatPvCompare(previousSitePv, site_pv)}，访客数 ${formatPvCompare(previousSiteUv, site_uv)}`
+      );
+    } else {
+      console.warn(`  站点统计失败 (${siteErrMsg})`);
+    }
+  } else {
+    const sitePvNote =
+      fetchedSite.site_pv === 0 && site_pv > 0 ? '，总访问量沿用上次' : '';
+    const siteUvNote =
+      fetchedSite.site_uv === 0 && site_uv > 0 ? '，访客数沿用上次' : '';
+    console.log(
+      `  总访问量 ${formatPvCompare(previousSitePv, site_pv)}${sitePvNote}，访客数 ${formatPvCompare(previousSiteUv, site_uv)}${siteUvNote}`
+    );
+  }
+
+  console.log(`\n拉取 ${posts.length} 篇文章阅读量（Referer → 不蒜子）…`);
+  if (previousPv.size || previousSitePv !== undefined || previousSiteUv !== undefined) {
+    console.log(`已加载上次 ${OUT_FILE}（${previousUpdatedAt || '未知时间'}），失败或返回 0 时将沿用对应记录`);
   }
 
   const items = await mapPool(
@@ -261,11 +334,19 @@ async function main() {
 
   items.sort((a, b) => b.pv - a.pv || a.title.localeCompare(b.title, 'zh'));
 
-  printComparisonSummary(previousUpdatedAt, previousPv, items);
+  printComparisonSummary(
+    previousUpdatedAt,
+    { sitePv: previousSitePv, siteUv: previousSiteUv },
+    { site_pv, site_uv },
+    previousPv,
+    items
+  );
 
   const payload = {
     updatedAt: new Date().toISOString(),
     baseURL,
+    site_pv,
+    site_uv,
     items,
   };
 

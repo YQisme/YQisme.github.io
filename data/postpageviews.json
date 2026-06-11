@@ -1,60 +1,68 @@
 {
-  "updatedAt": "2026-06-10T05:59:30.945Z",
+  "updatedAt": "2026-06-11T08:53:09.830Z",
   "baseURL": "https://ean7.top/",
+  "site_pv": 1060,
+  "site_uv": 567,
   "items": [
     {
       "rel": "/posts/hugo/",
       "permalink": "https://ean7.top/posts/hugo/",
       "title": "初见Hugo",
-      "pv": 123
+      "pv": 129
     },
     {
       "rel": "/posts/hello/",
       "permalink": "https://ean7.top/posts/hello/",
       "title": "Hello PaperMod",
-      "pv": 112
+      "pv": 118
     },
     {
       "rel": "/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "permalink": "https://ean7.top/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "title": "IPv6初尝试",
-      "pv": 101
+      "pv": 107
     },
     {
       "rel": "/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "permalink": "https://ean7.top/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "title": "ESP32-cam快速入门",
-      "pv": 75
+      "pv": 81
     },
     {
       "rel": "/posts/ipone17/",
       "permalink": "https://ean7.top/posts/ipone17/",
       "title": "iphone初体验",
-      "pv": 56
+      "pv": 62
     },
     {
       "rel": "/posts/hololens2/",
       "permalink": "https://ean7.top/posts/hololens2/",
       "title": "HoloLens 2 初体验",
-      "pv": 32
+      "pv": 38
     },
     {
       "rel": "/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
       "title": "AI边缘盒子",
-      "pv": 9
-    },
-    {
-      "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
-      "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
-      "title": "windows server服务器验机流程",
-      "pv": 3
+      "pv": 15
     },
     {
       "rel": "/posts/%E9%9A%8F%E8%BA%ABwifi/",
       "permalink": "https://ean7.top/posts/%E9%9A%8F%E8%BA%ABwifi/",
       "title": "随身wifi初体验",
-      "pv": 1
+      "pv": 8
+    },
+    {
+      "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
+      "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
+      "title": "windows server服务器验机流程",
+      "pv": 8
+    },
+    {
+      "rel": "/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
+      "permalink": "https://ean7.top/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
+      "title": "windows server 2022 部署前后端项目",
+      "pv": 6
     }
   ]
 }

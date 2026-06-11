@@ -10,7 +10,7 @@ if errorlevel 1 goto :no_node
 where hugo >nul 2>&1
 if errorlevel 1 goto :no_hugo
 
-echo 正在拉取文章阅读量（将显示上次与最新对比）...
+echo 正在拉取站点统计与文章阅读量（将显示上次与最新对比）...
 echo.
 
 node "%~dp0fetch-post-pv.mjs"
