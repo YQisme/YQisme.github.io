@@ -1,6 +1,7 @@
 ---
 title: "随身wifi初体验"
 date: 2026-06-10
+lastmod: 2026-06-10
 draft: false
 tags: ["随身WiFi", "4G", "移动热点", "流量", "网络"]
 categories: ["数码", "随笔"]

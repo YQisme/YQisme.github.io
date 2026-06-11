@@ -1,6 +1,7 @@
 ---
 title: "AI边缘盒子"
 date: 2026-06-01
+lastmod: 2026-06-01
 draft: false
 description: "选购 i9-11900KB + RTX 4060 边缘盒用于 YOLO 视频推理，记录开箱、Ubuntu 环境、CUDA/Miniconda/YOLO 部署与验机流程。"
 tags: ["边缘计算", "YOLO", "Ultralytics", "NVIDIA", "CUDA", "RTX 4060", "Ubuntu", "验机"]

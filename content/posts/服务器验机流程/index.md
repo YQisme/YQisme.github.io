@@ -1,6 +1,7 @@
 ---
 title: "windows server服务器验机流程"
 date: 2026-05-29
+lastmod: 2026-05-29
 draft: false
 tags: ["Windows Server", "服务器", "硬件检测"]
 categories: ["技术", "教程"]
