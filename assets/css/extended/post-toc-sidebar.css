@@ -1,0 +1,103 @@
+/* 目录浮于主内容区左侧空白，不改变文章原有排版 */
+.post-toc-sidebar {
+    --toc-width: 200px;
+    position: fixed;
+    z-index: 2;
+    top: calc(var(--header-height) + 12px);
+    left: calc((100vw - var(--main-width) - var(--gap) * 2) / 2 - var(--toc-width) - var(--gap));
+    width: var(--toc-width);
+    max-height: calc(100vh - var(--header-height) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10px 0;
+    scrollbar-width: thin;
+}
+
+nav.toc.toc--sidebar {
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+nav.toc.toc--sidebar .toc__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 8px;
+    padding: 0 4px;
+    letter-spacing: 0.02em;
+}
+
+nav.toc.toc--sidebar .toc__inner {
+    margin: 0;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+nav.toc.toc--sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav.toc.toc--sidebar li {
+    margin: 0;
+}
+
+nav.toc.toc--sidebar li ul {
+    margin-inline-start: 10px;
+    padding-inline-start: 0;
+    border-inline-start: 1px solid var(--border);
+}
+
+nav.toc.toc--sidebar a {
+    display: block;
+    padding: 3px 6px;
+    color: var(--secondary);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+nav.toc.toc--sidebar a:hover {
+    color: var(--primary);
+    background: var(--code-bg);
+    text-decoration: none;
+}
+
+nav.toc.toc--sidebar a.is-active {
+    color: var(--primary);
+    font-weight: 600;
+    background: var(--code-bg);
+    box-shadow: inset 2px 0 0 var(--primary);
+}
+
+nav.toc.toc--sidebar a.is-active:hover {
+    background: var(--code-bg);
+}
+
+/* 视口不够宽时回退为正文上方紧凑目录 */
+@media screen and (max-width: 1279px) {
+    .post-toc-sidebar {
+        position: static;
+        left: auto;
+        width: auto;
+        max-height: 240px;
+        z-index: auto;
+        margin-bottom: var(--content-gap);
+        padding: 12px;
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+    }
+
+    [data-theme="dark"] .post-toc-sidebar {
+        background: var(--entry);
+    }
+
+    nav.toc.toc--sidebar .toc__inner {
+        font-size: 13px;
+    }
+}

@@ -1,2 +1,7 @@
 {{- /* 全站粒子背景（PaperMod 在每页 footer 末尾注入） */ -}}
 {{ partial "particles-background.html" . }}
+
+{{- if and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (.Param "ShowToc") }}
+{{- $tocSpy := resources.Get "js/toc-scroll-spy.js" | js.Build | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $tocSpy.RelPermalink }}" integrity="{{ $tocSpy.Data.Integrity }}"></script>
+{{- end }}
