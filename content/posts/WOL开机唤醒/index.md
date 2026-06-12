@@ -1,6 +1,7 @@
 ---
 title: "WOL开机唤醒"
 date: 2026-06-12
+lastmod: 2026-06-12
 draft: false
 tags: ["WOL", "Wake-on-LAN", "远程唤醒", "Windows", "BIOS", "家庭网络"]
 categories: ["技术", "教程"]
@@ -202,7 +203,7 @@ $udp.Close()
 
 Ubuntu 自带命令
 
-#### 1️⃣ 安装工具
+1️⃣ 安装工具
 
 ```
 sudo apt update
@@ -211,7 +212,7 @@ sudo apt install wakeonlan -y
 
 ------
 
-#### 2️⃣ 直接唤醒
+2️⃣ 直接唤醒
 
 ```
 wakeonlan 00:11:22:33:44:55

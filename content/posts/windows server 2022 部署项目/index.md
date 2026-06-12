@@ -1,6 +1,7 @@
 ---
 title: "windows server 2022 部署前后端项目"
 date: 2026-06-11
+lastmod: 2026-06-11
 draft: false
 tags: ["Windows Server 2022", "IIS", "Vue3", "ASP.NET", ".NET 8", "部署"]
 categories: ["技术", "教程"]
