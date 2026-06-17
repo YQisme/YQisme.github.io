@@ -1,0 +1,16 @@
+/* 博客列表卡片：统一封面高度，避免竖图撑高整张卡片 */
+.post-entry .entry-cover,
+.first-entry .entry-cover {
+    height: 180px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--tertiary);
+}
+
+.post-entry .entry-cover img,
+.first-entry .entry-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
