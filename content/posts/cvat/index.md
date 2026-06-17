@@ -1,5 +1,5 @@
 ---
-title: "CVAT"
+title: "图像/视频标注工具CVAT"
 date: 2026-06-16
 lastmod: 2026-06-16
 draft: false
