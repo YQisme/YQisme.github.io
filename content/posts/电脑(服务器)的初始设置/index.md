@@ -72,6 +72,70 @@ categories: ["技术", "教程"]
 
 详情可以查看[windows server 2022 部署前后端项目 | Ean7的小站](https://ean7.top/posts/windows-server-2022-部署项目/)
 
+## BMC/IPMI
+
+判断一台服务器是否支持 **BMC / IPMI**，可以从“硬件 + 系统 + 网络表现”三层来确认，最可靠的是硬件层验证。
+
+### 最直接方法：看硬件是否有 BMC
+
+### 看主板/服务器型号
+
+去查服务器型号（非常关键）：
+
+- Dell：iDRAC（本质 BMC/IPMI）
+- HPE：iLO
+- Lenovo：XClarity Controller
+- 超微 Supermicro：IPMI/BMC（最典型）
+
+👉 如果是这些品牌的“服务器级主板”，基本 100% 有 BMC/IPMI。
+
+------
+
+### 看物理接口（最简单判断）
+
+在机器背面找：
+
+- 独立管理网口（常见标记）
+  - “iDRAC”
+  - “IPMI”
+  - “MGMT”
+  - “BMC”
+
+👉 有“单独一个 RJ45 管理口” = 几乎肯定有 BMC/IPMI
+
+###  BIOS / UEFI 里检查
+
+进 BIOS/UEFI，看：
+
+- “Server Management”
+- “BMC Settings”
+- “IPMI Configuration”
+- “iDRAC / iLO / XClarity”
+
+如果有这些菜单：
+
+👉 说明一定支持 BMC
+
+------
+
+### 确定ip地址
+
+#### 扫描局域网
+
+```
+nmap -sn 192.168.1.0/24
+```
+
+重点找：
+
+- 多出来一个未知设备
+- 或 MAC 属于：
+  - Dell
+  - HPE
+  - Supermicro
+
+> 拔插前后对比扫描出来的结果，增加的那一个ip就是了
+
 ## 推荐的软件安装
 
 ### 微软运行库
