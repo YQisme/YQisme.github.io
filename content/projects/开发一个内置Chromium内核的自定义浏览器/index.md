@@ -6,6 +6,7 @@ cover:
   image: 2026-06-29_16-08-52.jpg
 ---
 
+
 >因为在项目开发过程中，遇到了一个场景：不需要导航，标签等浏览器功能，只需要一个全屏的浏览器，用于展示目标网页内容。但是目标硬件中的webview版本较低,是83的，且无法升级，所以就开发一个内置Chromium内核的浏览器，跳过调用系统webview的步骤，直接使用Chromium内核。
 
 基于 **独立 Chromium 133 内核** 的全屏浏览器应用（通过 WebViewUpgrade 内置 Google WebView APK）。
