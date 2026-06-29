@@ -609,3 +609,65 @@ sudo apt install btop
 - 类似 htop
 - 可 kill / sort / filter 进程
 
+### git
+
+`sudo apt install git`
+
+### nodejs
+
+#### 使用 NodeSource 仓库
+
+这个方法会将 Node.js 官方维护的仓库添加到你的系统中，之后用 `apt` 安装的就是较新的特定大版本（如 18.x、20.x 或 22.x），适合需要特定稳定版本的生产环境或开发环境。
+
+操作步骤如下（以安装 Node.js 20.x（当前活跃的 LTS 版本）为例）：
+
+1. **更新包列表并安装 `curl`（如果未安装）**：
+
+   bash
+
+   ```
+   sudo apt update
+   sudo apt install curl -y
+   ```
+
+   
+
+2. **添加 NodeSource 仓库**：运行以下命令，脚本会自动配置好 APT 源。
+
+   bash
+
+   ```
+   # 将 setup_22.x 中的 22 替换为你想要的版本号，例如 setup_18.x 或 setup_20.x
+   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+   ```
+
+   
+
+3. **安装 Node.js（包含 `npm`）**：
+
+   bash
+
+   ```
+   sudo apt install -y nodejs
+   ```
+
+   
+
+4. **验证安装**：
+
+   bash
+
+   ```
+   node -v  # 例如，会显示 v20.x.x
+   npm -v   # 显示对应的 npm 版本
+   ```
+
+### ffmpeg
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ffmpeg
+```
+
+
+
