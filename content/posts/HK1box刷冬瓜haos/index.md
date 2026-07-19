@@ -1,8 +1,8 @@
 ---
 title: "HK1 BOX 晶晨S905X3芯片刷home assistant智能家居系统"
-date: 2026-07-02
-lastmod: 2026-07-16
-draft: true
+date: 2026-07-019
+lastmod: 2026-07-19
+draft: false
 tags: ["HK1 BOX", "晶晨", "Amlogic", "S905X3", "Home Assistant", "冬瓜HAOS", "智能家居", "Armbian", "机顶盒"]
 categories: ["技术", "教程"]
 ---
