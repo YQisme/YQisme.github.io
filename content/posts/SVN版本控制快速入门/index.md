@@ -7,6 +7,8 @@ tags: ["SVN", "Subversion", "版本控制", "VisualSVN", "TortoiseSVN", "Windows
 categories: ["技术", "教程"]
 ---
 
+![image-20260721092636109](./image-20260721092636109.png) 
+
 现在大多数互联网、开源项目已经转向 **Git + GitHub/GitLab/Gitea**，不过 SVN 在一些企业、传统行业、内部项目里仍然非常常见。Apache Subversion 目前仍在维护，并且官方定位仍是企业级集中式版本控制系统。
 
 简单来说：
