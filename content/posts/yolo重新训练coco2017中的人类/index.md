@@ -1,3 +1,11 @@
+---
+title: "yolo单独训练coco数据集中的人类"
+date: 2026-07-21
+lastmod: 2026-07-21
+draft: true
+tags: []
+categories: []
+---
 # yolo单独训练coco数据集中的人类
 
 ## 数据集下载
