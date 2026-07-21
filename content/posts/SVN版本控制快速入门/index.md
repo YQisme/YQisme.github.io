@@ -2,7 +2,7 @@
 title: "SVN版本控制快速入门"
 date: 2026-07-20
 lastmod: 2026-07-21
-draft: true
+draft: false
 tags: ["SVN", "Subversion", "版本控制", "VisualSVN", "TortoiseSVN", "Windows"]
 categories: ["技术", "教程"]
 ---
