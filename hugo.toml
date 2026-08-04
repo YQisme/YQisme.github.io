@@ -24,8 +24,8 @@ enableGitInfo = true
 
   defaultTheme = "auto"
 
-  # 启用搜索
-  fuseOpts = { isCaseSensitive = false, shouldSort = true }
+  # 启用搜索（阈值越低越严格；includeMatches 用于结果预览片段）
+  fuseOpts = { isCaseSensitive = false, shouldSort = true, threshold = 0.3, includeMatches = true, includeScore = true, minMatchCharLength = 1, ignoreLocation = true, findAllMatches = true }
 
 # 浏览器标签页图标（对应 static/images/avatar.jpg）
 [params.assets]
