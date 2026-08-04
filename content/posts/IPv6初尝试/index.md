@@ -97,3 +97,21 @@ TP-Link
 >
 >
 >终于折腾成功了！！！接下来去玩一玩其他好玩的功能（网盘，影音系统，游戏串流……哈哈😄）
+
+# 高级
+
+## ddns-go
+
+为了防止ipv6经常更换，所以需要[ddns-go](https://github.com/jeessy2/ddns-go)来绑定域名
+
+下载https://github.com/jeessy2/ddns-go/releases/download/v6.17.4/ddns-go_6.17.4_windows_x86_64.zip
+
+用管理员权限安装为后台服务
+
+```cmd
+.\ddns-go.exe -s install
+```
+
+打开http://localhost:9876/进行配置
+
+填上阿里云的AccessKey ID和AccessKey ，关闭ipv4,在ipv6下填入域名即可（需提前在阿里云中解析域名）
