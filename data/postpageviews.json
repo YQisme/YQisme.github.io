@@ -1,98 +1,116 @@
 {
-  "updatedAt": "2026-07-21T01:18:54.994Z",
+  "updatedAt": "2026-08-06T03:30:39.336Z",
   "baseURL": "https://ean7.top/",
-  "site_pv": 1608,
-  "site_uv": 899,
+  "site_pv": 1910,
+  "site_uv": 1077,
   "items": [
     {
       "rel": "/posts/hugo/",
       "permalink": "https://ean7.top/posts/hugo/",
       "title": "初见Hugo",
-      "pv": 134
+      "pv": 137
     },
     {
       "rel": "/posts/hello/",
       "permalink": "https://ean7.top/posts/hello/",
       "title": "Hello PaperMod",
-      "pv": 124
+      "pv": 125
     },
     {
       "rel": "/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "permalink": "https://ean7.top/posts/ipv6%E5%88%9D%E5%B0%9D%E8%AF%95/",
       "title": "IPv6初尝试",
-      "pv": 112
+      "pv": 113
     },
     {
       "rel": "/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "permalink": "https://ean7.top/posts/esp32-cam%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
       "title": "ESP32-cam快速入门",
-      "pv": 85
+      "pv": 87
     },
     {
       "rel": "/posts/ipone17/",
       "permalink": "https://ean7.top/posts/ipone17/",
       "title": "iphone初体验",
-      "pv": 68
+      "pv": 70
     },
     {
       "rel": "/posts/hololens2/",
       "permalink": "https://ean7.top/posts/hololens2/",
       "title": "HoloLens 2 初体验",
-      "pv": 43
-    },
-    {
-      "rel": "/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
-      "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
-      "title": "AI边缘盒子",
-      "pv": 19
-    },
-    {
-      "rel": "/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
-      "permalink": "https://ean7.top/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
-      "title": "windows server 2022 部署前后端项目",
-      "pv": 18
-    },
-    {
-      "rel": "/posts/%E9%9A%8F%E8%BA%ABwifi/",
-      "permalink": "https://ean7.top/posts/%E9%9A%8F%E8%BA%ABwifi/",
-      "title": "随身wifi初体验",
-      "pv": 17
-    },
-    {
-      "rel": "/posts/cvat/",
-      "permalink": "https://ean7.top/posts/cvat/",
-      "title": "图像/视频标注工具CVAT",
-      "pv": 15
-    },
-    {
-      "rel": "/posts/wol%E5%BC%80%E6%9C%BA%E5%94%A4%E9%86%92/",
-      "permalink": "https://ean7.top/posts/wol%E5%BC%80%E6%9C%BA%E5%94%A4%E9%86%92/",
-      "title": "WOL开机唤醒",
-      "pv": 14
-    },
-    {
-      "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
-      "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
-      "title": "windows server服务器验机流程",
-      "pv": 13
-    },
-    {
-      "rel": "/posts/%E7%94%B5%E8%84%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E8%AE%BE%E7%BD%AE/",
-      "permalink": "https://ean7.top/posts/%E7%94%B5%E8%84%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E8%AE%BE%E7%BD%AE/",
-      "title": "电脑(服务器)的初始设置",
-      "pv": 12
+      "pv": 46
     },
     {
       "rel": "/posts/hk1box%E5%88%B7%E5%86%AC%E7%93%9Chaos/",
       "permalink": "https://ean7.top/posts/hk1box%E5%88%B7%E5%86%AC%E7%93%9Chaos/",
       "title": "HK1 BOX 晶晨S905X3芯片刷home assistant智能家居系统",
-      "pv": 4
+      "pv": 21
+    },
+    {
+      "rel": "/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
+      "permalink": "https://ean7.top/posts/windows-server-2022-%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/",
+      "title": "windows server 2022 部署前后端项目",
+      "pv": 21
+    },
+    {
+      "rel": "/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
+      "permalink": "https://ean7.top/posts/ai%E8%BE%B9%E7%BC%98%E7%9B%92%E5%AD%90/",
+      "title": "AI边缘盒子",
+      "pv": 20
+    },
+    {
+      "rel": "/posts/%E9%9A%8F%E8%BA%ABwifi/",
+      "permalink": "https://ean7.top/posts/%E9%9A%8F%E8%BA%ABwifi/",
+      "title": "随身wifi初体验",
+      "pv": 18
+    },
+    {
+      "rel": "/posts/cvat/",
+      "permalink": "https://ean7.top/posts/cvat/",
+      "title": "图像/视频标注工具CVAT",
+      "pv": 17
+    },
+    {
+      "rel": "/posts/wol%E5%BC%80%E6%9C%BA%E5%94%A4%E9%86%92/",
+      "permalink": "https://ean7.top/posts/wol%E5%BC%80%E6%9C%BA%E5%94%A4%E9%86%92/",
+      "title": "WOL开机唤醒",
+      "pv": 15
+    },
+    {
+      "rel": "/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
+      "permalink": "https://ean7.top/posts/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%AA%8C%E6%9C%BA%E6%B5%81%E7%A8%8B/",
+      "title": "windows server服务器验机流程",
+      "pv": 14
+    },
+    {
+      "rel": "/posts/%E7%94%B5%E8%84%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E8%AE%BE%E7%BD%AE/",
+      "permalink": "https://ean7.top/posts/%E7%94%B5%E8%84%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E8%AE%BE%E7%BD%AE/",
+      "title": "电脑(服务器)的初始设置",
+      "pv": 13
     },
     {
       "rel": "/posts/hk1box%E5%88%B7%E6%9C%BA/",
       "permalink": "https://ean7.top/posts/hk1box%E5%88%B7%E6%9C%BA/",
       "title": "HK1 BOX 晶晨S905X3芯片线刷slimBOXtv-9.17.2-ATV系统包",
-      "pv": 4
+      "pv": 9
+    },
+    {
+      "rel": "/posts/svn%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
+      "permalink": "https://ean7.top/posts/svn%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
+      "title": "SVN版本控制快速入门",
+      "pv": 7
+    },
+    {
+      "rel": "/posts/modbus%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
+      "permalink": "https://ean7.top/posts/modbus%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/",
+      "title": "modbus快速入门",
+      "pv": 6
+    },
+    {
+      "rel": "/posts/influxdb/",
+      "permalink": "https://ean7.top/posts/influxdb/",
+      "title": "InfluxDB 3 快速入门",
+      "pv": 5
     }
   ]
 }
