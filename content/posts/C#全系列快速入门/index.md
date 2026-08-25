@@ -1,13 +1,11 @@
 ---
-title: "C#全系列快速入门"
+title: "C#、.NET 、ASP.NET Core、Visual Studio全系列快速入门"
 date: 2026-08-25
 lastmod: 2026-08-25
 draft: false
 tags: ["C#", ".NET", "ASP.NET Core", "Visual Studio", "教程"]
 categories: ["技术", "教程"]
 ---
-
-# C#、.NET 、 ASP.NET Core、Visual Studio全系列快速入门
 
 ## 基本概念
 
