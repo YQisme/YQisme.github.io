@@ -5,11 +5,14 @@ date: 2026-08-20
 description: "基于 Vue 3 + Three.js 的 Web 端数字孪生编辑器：场景搭建、模型导入、数据绑定、事件联动与预览发布，浏览器内即可完成，无需客户端插件。"
 cover:
   image: image-20260820174908591.png
+
 ---
 
  ![image-20260820174908591](./image-20260820174908591.png)
 
 # 孪生智造 · 数字孪生 3D 可视化建模平台
+
+项目地址：[YQisme/TwinCraft](https://github.com/YQisme/TwinCraft)
 
 基于 **Vue 3 + Three.js** 的 Web 端数字孪生编辑器（MVP）。浏览器内即可完成场景搭建、模型导入、数据绑定、事件联动与预览发布，无需安装客户端插件。
 
