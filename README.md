@@ -37,11 +37,19 @@ git submodule update --init --recursive
 
 ## 本地预览（Hugo）
 
-```bash
-hugo server --buildDrafts
+Windows 推荐双击或在终端运行：
+
+```bat
+preview.bat
 ```
 
-浏览器访问 <http://localhost:1313/>。
+等价于先同步目录同名 `.md` → `index.md`，再执行 `hugo server`（**development 环境默认包含草稿**）。也可：
+
+```bash
+node scripts/hugo.mjs server
+```
+
+浏览器访问 <http://localhost:1313/>。草稿在列表中会标 `[草稿]`。正式部署（`hugo --minify`）仍不会发布草稿。
 
 首页「最热文章」依赖 `data/postpageviews.json`。若该文件不存在或数据过旧，可先执行 [更新文章阅读量](#更新文章阅读量) 再启动预览。
 
@@ -65,18 +73,27 @@ hugo --minify
 
 ### 目录结构（Page Bundle）
 
-每篇文章使用**叶子包**：在 `content/posts/` 下新建文件夹，内含 `index.md` 与同目录图片，例如：
+每篇文章使用**叶子包**：在 `content/posts/` 下新建文件夹，正文为**与目录同名**的 Markdown（可含 `#`、空格、括号等），配图放同目录：
 
 ```text
 content/posts/我的文章/
-├── index.md
+├── 我的文章.md
 ├── cover.png          # 可选，需在 front matter 中声明 cover.image
 └── screenshot-1.png
 ```
 
+Hugo 仍要求叶子包有 `index.md`。构建前脚本会把目录同名 `.md` 同步为 `index.md`（生成文件已 gitignore，勿手改）：
+
+```bash
+node scripts/ensure-index.mjs                # 仅同步 index.md
+node scripts/hugo.mjs server --buildDrafts   # 先同步再 hugo（推荐）
+```
+
+直接跑 `hugo server` 前需先执行一次 `ensure-index`，否则看不到文章。CI 部署前也会自动执行。
+
 Hugo 会将包内资源发布到文章 URL 路径下（如 `/posts/我的文章/`）。文件夹名中的中文、空格会按规则转成 URL（如 `HoloLens2` → `/posts/hololens2/`），本地预览时以终端或浏览器地址栏为准。
 
-**封面图**（详情页顶部大图，PaperMod 提供）在同目录放图后，于 `index.md` 中声明文件名（不要写 `./` 前缀）：
+**封面图**（详情页顶部大图，PaperMod 提供）在同目录放图后，于正文 front matter 中声明文件名（不要写 `./` 前缀）：
 
 ```yaml
 cover:
@@ -121,8 +138,8 @@ categories: ["技术", "随笔"]
 
 ### 发布新文章建议流程
 
-1. 在 `content/posts/` 新建目录并编写 `index.md`，图片放在同目录。
-2. `hugo server --buildDrafts` 本地检查排版与链接。
+1. 在 `content/posts/` 新建目录，编写与目录同名的 `.md`，图片放在同目录。
+2. `node scripts/hugo.mjs server --buildDrafts` 本地检查排版与链接。
 3. 将 `draft` 设为 `false`。
 4. （可选）`node scripts/fetch-post-pv.mjs` 更新阅读量数据。
 5. `hugo --minify` 确认能成功构建。
@@ -138,11 +155,11 @@ categories: ["技术", "随笔"]
 
 ```text
 content/projects/我的项目/
-├── index.md
+├── 我的项目.md
 └── image-20260528101948221.png
 ```
 
-`index.md` 示例：
+正文 front matter 示例：
 
 ```yaml
 ---
@@ -177,8 +194,8 @@ image: "/images/demo.jpg"
 
 ### 发布新项目建议流程
 
-1. 在 `content/projects/` 新建目录，编写 `index.md`，封面与配图放在同目录。
-2. `hugo server --buildDrafts` 检查 `/projects/` 列表卡片与项目详情页封面。
+1. 在 `content/projects/` 新建目录，编写与目录同名的 `.md`，封面与配图放在同目录。
+2. `node scripts/hugo.mjs server --buildDrafts` 检查 `/projects/` 列表卡片与项目详情页封面。
 3. 确认 `content/projects/_index.md` 的 `layout: "projects"` 未被改动（用于列表布局）。
 4. 提交并推送。
 
@@ -235,7 +252,7 @@ node scripts/fetch-post-pv.mjs
 2. **Settings → Pages**：Source 选择 **Deploy from a branch**，Branch 选 `gh-pages`，目录 `/ (root)`。
 3. 推送 `main` 后，在 Actions 页查看 **Deploy site** 是否成功。
 
-工作流会：检出代码（含子模块）→ 恢复 Git 时间戳 → 安装 Hugo Extended → `hugo --minify` → 将 `public/` 推送到 `gh-pages`。
+工作流会：检出代码（含子模块）→ 恢复 Git 时间戳 → 安装 Hugo Extended → `node scripts/ensure-index.mjs` → `hugo --minify` → 将 `public/` 推送到 `gh-pages`。
 
 若使用自定义域名，在仓库根目录添加 `CNAME` 并在 DNS 中指向 GitHub Pages；`baseURL` 需与线上一致。
 
@@ -243,8 +260,8 @@ node scripts/fetch-post-pv.mjs
 
 | 路径 | 说明 |
 |------|------|
-| `content/posts/` | 博客文章（建议每篇一个子目录 + `index.md`） |
-| `content/projects/` | 项目页（子目录 + `index.md` 为 bundle；亦支持单文件 `.md`） |
+| `content/posts/` | 博客文章（子目录 + 与目录同名 `.md`） |
+| `content/projects/` | 项目页（子目录 + 与目录同名 `.md`；亦支持单文件 `.md`） |
 | `content/projects/_index.md` | 项目列表页（`layout: projects`） |
 | `content/about/` | 关于页 |
 | `content/categories/`、`content/tags/` | 分类 / 标签列表页 |
@@ -253,6 +270,9 @@ node scripts/fetch-post-pv.mjs
 | `layouts/` | 站点级模板覆盖（自定义首页、页眉页脚、分类标签样式等） |
 | `layouts/_partials/` | 片段模板（如 `post_meta.html`、`extend_head.html`） |
 | `scripts/fetch-post-pv.mjs` | 从不蒜子拉取阅读量并写入 `data/` |
+| `scripts/ensure-index.mjs` | 将目录同名 `.md` 同步为 Hugo 所需的 `index.md` |
+| `scripts/hugo.mjs` | 先跑 `ensure-index` 再调用 `hugo` |
+| `preview.bat` | Windows 一键本地预览（调用 `scripts/hugo.mjs server --buildDrafts`） |
 | `static/` | 静态资源（如 `static/images/avatar.jpg`），构建时复制到站点根路径 |
 | `hugo.toml` | Hugo 站点配置（`baseURL`、主题、菜单、搜索输出等） |
 | `themes/PaperMod` | 主题（Git 子模块） |

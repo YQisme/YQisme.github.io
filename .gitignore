@@ -1,2 +1,6 @@
 public
 resources/_gen/
+
+# ensure-index 生成的叶子包入口（正文以目录同名 .md 为准；勿忽略 _index.md）
+content/posts/**/index.md
+content/projects/**/index.md

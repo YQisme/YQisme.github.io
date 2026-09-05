@@ -27,6 +27,14 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ensure page-bundle index.md
+        run: node scripts/ensure-index.mjs
+
       - name: Build
         run: hugo --minify
 

@@ -486,7 +486,7 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       {{- if .Lastmod.IsZero -}}{{- $lm = .Date -}}{{- end -}}
       <li data-sort-key="{{ $lm.Unix }}">
         <a href="{{ .RelPermalink }}" class="posts-list__link">
-          <span class="posts-list__title">{{ .Title }}</span>
+          <span class="posts-list__title">{{ .Title }}{{ if .Draft }} <small style="font-weight:500;opacity:.65">[草稿]</small>{{ end }}</span>
           <time class="posts-list__date" datetime="{{ $lm.Format "2006-01-02T15:04:05Z07:00" }}" title="最后更新">{{ $lm.Format $df }}</time>
         </a>
       </li>
