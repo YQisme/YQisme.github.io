@@ -606,8 +606,15 @@ title = "首页"
 
 直接采用vercel一键部署
 
-vercel绑定github账号后，设置`Project Name`作为域名前缀后，`Build Command` 中 填写`hugo --minify`
-`Output Directory` 中填写  `public`,还要指定环境变量`HUGO_VERSION`为`1.61.0`，点击部署即可。
+vercel绑定github账号后，设置`Project Name`作为域名前缀。仓库根目录已有 `vercel.json`，构建命令为：
+
+```bash
+node scripts/hugo.mjs --minify
+```
+
+（先同步目录同名 `.md` → `index.md`，再 `hugo --minify`。若只写 `hugo --minify`，新项目会变成 `/projects/目录名/目录名/`，封面图路径也会错一层。）
+
+`Output Directory` 填 `public`，并设置环境变量 `HUGO_VERSION`（建议用较新的 Extended 版本，例如 `0.146.0` 或更新），点击部署即可。
 
 ## 国内访问
 

@@ -1,0 +1,4 @@
+{
+  "buildCommand": "node scripts/hugo.mjs --minify",
+  "outputDirectory": "public"
+}

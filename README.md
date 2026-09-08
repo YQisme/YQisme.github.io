@@ -64,10 +64,12 @@ docker compose up
 ## 构建
 
 ```bash
-hugo --minify
+node scripts/hugo.mjs --minify
 ```
 
-静态文件输出到 `public/`。
+会先把目录同名 `.md` 同步为叶子包所需的 `index.md`，再执行 `hugo --minify`。静态文件输出到 `public/`。
+
+> Vercel 部署请使用仓库根目录的 [`vercel.json`](vercel.json)（已写明上述构建命令）。若在控制台手动配置，**不要**只填 `hugo --minify`，否则新文章/项目在未提交 `index.md` 时会出现 URL 多一层目录名、封面图 404。
 
 ## 写文章
 

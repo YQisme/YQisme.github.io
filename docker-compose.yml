@@ -7,4 +7,5 @@ services:
       - "1313:1313"
     volumes:
       - .:/src
-    command: hugo server --bind 0.0.0.0 --buildDrafts
+    # 先 ensure-index 再 server，避免叶子包缺少 index.md
+    command: sh -c "node scripts/ensure-index.mjs && hugo server --bind 0.0.0.0 --buildDrafts"
