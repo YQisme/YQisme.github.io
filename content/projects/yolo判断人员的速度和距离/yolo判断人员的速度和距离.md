@@ -3,7 +3,7 @@ title: "yolo判断人员的速度和距离"
 date: 2026-09-08
 description: "基于 YOLO 人员检测 + ByteTrack 跟踪 + 摄像机地面标定，实现稳定的人员距离、速度、靠近/远离摄像头方向判断，适用于固定摄像头的厂区监控场景"
 cover:
-  image: 人员监控与轨迹分析示意图.png
+  image: cover.png
 ---
 
 # YOLO 人员距离速度检测
@@ -447,9 +447,3 @@ rtsp://admin:密码@IP:554/Streaming/Channels/102   # 子码流
 - 优先排查 YOLO 推理与 RTSP 缓冲（已默认 `CAP_PROP_BUFFERSIZE=1`）
 - Web MJPEG 比本地 `main.py` 窗口延迟更高，属正常现象
 
-## 后续扩展
-
-- 多摄像头统一到厂区坐标系
-- 跨摄像头连续跟踪
-- 告警规则（如距摄像头 < 3m 且靠近时触发）
-- 对接平台 API / WebSocket 推送
