@@ -1,5 +1,6 @@
 ---
 title: "yolo判断人员的速度和距离"
+categories: ["计算机视觉", "安防门禁"]
 date: 2026-09-08
 description: "基于 YOLO 人员检测 + ByteTrack 跟踪 + 摄像机地面标定，实现稳定的人员距离、速度、靠近/远离摄像头方向判断，适用于固定摄像头的厂区监控场景"
 cover:

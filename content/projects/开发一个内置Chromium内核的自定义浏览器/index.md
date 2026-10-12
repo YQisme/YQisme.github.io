@@ -1,5 +1,6 @@
 ---
 title: "开发一个内置Chromium内核的自定义浏览器"
+categories: ["Android", "工具"]
 date: 2026-06-29
 description: "基于独立Chromium 133内核的全屏浏览器应用"
 cover:

@@ -32,7 +32,9 @@
           {{- $type := .Type }}
           {{- range .Data.Terms.Alphabetical }}
             {{- $name := .Name }}
-            {{- $count := .Count }}
+            {{- /* 博客分类页只统计 posts，避免项目分类混入 */ -}}
+            {{- $count := len (where .Pages "Section" "eq" "posts") }}
+            {{- if gt $count 0 }}
             {{- with site.GetPage (printf "/%s/%s" $type $name) }}
             <li>
               <a href="{{ .Permalink }}" class="taxonomy-categories-page__nav-link">
@@ -40,6 +42,7 @@
                 <span class="taxonomy-categories-page__count">{{ $count }}</span>
               </a>
             </li>
+            {{- end }}
             {{- end }}
           {{- end }}
         </ul>

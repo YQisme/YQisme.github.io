@@ -1,5 +1,6 @@
 ---
 title: "震动监测及预警"
+categories: ["物联网", "Web应用"]
 date: 2026-08-06
 description: "震动采集与 PGA 分级预警：多仪多通道 UDP 接入、报警片段录制、InfluxDB/MQTT 输出，内置 FastAPI Web 监控与 Windows 离线便携部署"
 cover:

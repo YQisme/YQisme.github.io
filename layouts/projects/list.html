@@ -1,53 +1,117 @@
 {{ define "main" }}
 
-<div class="main">
-  <header class="page-header">
+{{- $pages := .Pages -}}
+{{- $total := len $pages -}}
+
+{{- /* 统计本页项目的分类及数量 */ -}}
+{{- $catCounts := dict -}}
+{{- range $pages -}}
+  {{- range (.Params.categories | default slice) -}}
+    {{- $key := . -}}
+    {{- $prev := index $catCounts $key | default 0 -}}
+    {{- $catCounts = merge $catCounts (dict $key (add $prev 1)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $catNames := slice -}}
+{{- range $name, $_ := $catCounts -}}
+  {{- $catNames = $catNames | append $name -}}
+{{- end -}}
+{{- $catNames = sort $catNames -}}
+
+{{- $css := readFile "layouts/projects/projects-list.css" -}}
+<style>{{ $css | safe.CSS }}</style>
+
+<div class="main projects-list">
+  <header class="page-header projects-list__header">
     <h1>{{ .Title }}</h1>
-    <p>{{ .Content }}</p>
+    {{- with .Content -}}
+    <div class="projects-list__intro">{{ . }}</div>
+    {{- end -}}
+    <p class="projects-list__count">共 {{ $total }} 个项目</p>
+
+    {{- if $catNames -}}
+    <nav class="projects-list__cats" aria-label="项目分类">
+      <button type="button" class="projects-list__cat is-active" data-cat="all" aria-pressed="true">
+        全部 <span class="projects-list__cat-n">{{ $total }}</span>
+      </button>
+      {{- range $catNames -}}
+      {{- $n := index $catCounts . -}}
+      <button type="button" class="projects-list__cat" data-cat="{{ . }}" aria-pressed="false">
+        {{ . }} <span class="projects-list__cat-n">{{ $n }}</span>
+      </button>
+      {{- end -}}
+    </nav>
+    {{- end -}}
   </header>
 
-  <div class="post-entry-list" style="
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
-    gap:24px;
-  ">
-
-    {{ range .Pages }}
-      <article class="post-entry" style="
-        border-radius:12px;
-        overflow:hidden;
-        transition:0.2s;
-      ">
-
+  <div class="post-entry-list projects-list__grid">
+    {{ range $pages }}
+      {{- $cats := .Params.categories | default slice -}}
+      {{- $catsJoined := delimit $cats "," -}}
+      <article class="post-entry projects-list__card" data-categories="{{ $catsJoined }}">
         <a href="{{ .RelPermalink }}">
-
           {{- $page := . -}}
           {{- with $page.Params.image | default $page.Params.cover.image }}
-          <div style="height:180px; overflow:hidden; background:var(--tertiary);">
+          <div class="projects-list__thumb">
             {{- partial "project_thumb.html" $page -}}
           </div>
           {{- end }}
 
-          <div style="padding:16px;">
-            <h2 style="margin:0 0 8px;">
-              {{ .Title }}
-            </h2>
-
-            <p style="color:var(--secondary); font-size:14px; line-height:1.5; margin:0;">
+          <div class="projects-list__body">
+            <h2>{{ .Title }}</h2>
+            {{- with $cats -}}
+            <ul class="projects-list__tags">
+              {{- range . -}}
+              <li>{{ . }}</li>
+              {{- end -}}
+            </ul>
+            {{- end -}}
+            <p>
               {{- with .Description -}}
                 {{- . | truncate 80 -}}
               {{- else -}}
                 {{- .Summary | plainify | truncate 80 -}}
               {{- end -}}
             </p>
-
           </div>
         </a>
-
       </article>
     {{ end }}
-
   </div>
+
+  <p class="projects-list__empty" hidden>该分类下暂无项目</p>
 </div>
+
+<script>
+(function () {
+  var root = document.querySelector('.projects-list');
+  if (!root) return;
+  var buttons = root.querySelectorAll('.projects-list__cat');
+  var cards = root.querySelectorAll('.projects-list__card');
+  var empty = root.querySelector('.projects-list__empty');
+
+  function apply(cat) {
+    var visible = 0;
+    cards.forEach(function (card) {
+      var cats = (card.getAttribute('data-categories') || '').split(',').filter(Boolean);
+      var show = cat === 'all' || cats.indexOf(cat) !== -1;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (empty) empty.hidden = visible > 0;
+    buttons.forEach(function (btn) {
+      var active = btn.getAttribute('data-cat') === cat;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      apply(btn.getAttribute('data-cat') || 'all');
+    });
+  });
+})();
+</script>
 
 {{ end }}

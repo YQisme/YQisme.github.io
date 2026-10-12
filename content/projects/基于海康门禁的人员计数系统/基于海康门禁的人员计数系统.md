@@ -1,5 +1,6 @@
 ---
 title: "基于海康门禁的人员计数系统"
+categories: ["安防门禁", "Web应用"]
 date: 2026-06-08
 description: "基于海康门禁 SDK 的人员进出监控与看板系统。"
 cover:

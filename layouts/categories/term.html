@@ -2,7 +2,7 @@
 {{- $css := readFile "layouts/categories/taxonomy-categories.css" -}}
 <style>{{ $css | safe.CSS }}</style>
 
-{{- $pages := union .RegularPages .Sections }}
+{{- $pages := where (union .RegularPages .Sections) "Section" "eq" "posts" }}
 {{- $paginator := .Paginate $pages }}
 
 {{- $taxRoot := or .Parent (site.GetPage "/categories") }}
@@ -38,7 +38,8 @@
           </li>
           {{- range .Data.Terms.Alphabetical }}
             {{- $name := .Name }}
-            {{- $count := .Count }}
+            {{- $count := len (where .Pages "Section" "eq" "posts") }}
+            {{- if gt $count 0 }}
             {{- with site.GetPage (printf "/%s/%s" $type $name) }}
             <li>
               <a href="{{ .Permalink }}" class="taxonomy-categories-page__nav-link{{ if eq $ctx.Permalink .Permalink }} taxonomy-categories-page__nav-link--current{{ end }}">
@@ -46,6 +47,7 @@
                 <span class="taxonomy-categories-page__count">{{ $count }}</span>
               </a>
             </li>
+            {{- end }}
             {{- end }}
           {{- end }}
         </ul>
