@@ -4,7 +4,7 @@ categories: ["Web应用", "工具"]
 date: 2026-11-18
 description: "浏览器端 CNC 铣削 / 五轴模拟器：编写或加载 G-code，在 3D 场景中实时观看机床运动与材料去除。基于 Vue 3、TresJS / Three.js，纯前端运行，适合入门学习与 SF-260H 五轴可视化演示。"
 cover:
-  image: image-cover.jpg
+  image: cover.jpg
 ---
 
 # CNC计算机数控加工模拟器
