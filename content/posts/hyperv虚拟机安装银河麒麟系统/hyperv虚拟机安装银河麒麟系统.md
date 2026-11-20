@@ -1,4 +1,12 @@
 
+---
+title: "Hyper-V 虚拟机安装银河麒麟系统"
+date: 2026-11-20
+lastmod: 2026-11-20
+draft: false
+tags: ["Hyper-V", "银河麒麟", "Linux", "SSH", "Docker", "宝塔"]
+categories: ["技术", "教程"]
+---
 
 # 安装麒麟系统
 
