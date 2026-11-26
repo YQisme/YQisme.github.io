@@ -1,4 +1,12 @@
-
+---
+title: "Codex 远程连接 SSH 和 Docker 容器"
+date: 2026-11-26
+lastmod: 2026-11-26
+draft: false
+description: "在 Windows 上使用 SSHFS 映射远程项目目录，通过 SSH 执行远程命令并连接远程 Docker，让本地 Codex 能够操作远程项目。"
+tags: ["Codex", "SSH", "SSHFS", "Docker", "Windows"]
+categories: ["技术", "教程"]
+---
 
 **Windows 本地 Codex + SSHFS 远程文件映射 + SSH 远程命令执行。**
 
