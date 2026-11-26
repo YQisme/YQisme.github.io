@@ -3,7 +3,7 @@
 <style>
 .hero {
   text-align: center;
-  padding: 80px 20px;
+  padding: 80px 20px 20px;
 }
 
 /* ===== 头像 ===== */
@@ -61,8 +61,8 @@
 
 /* ===== 社交图标 ===== */
 .social-icons {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 42px));
   align-items: center;
   justify-content: center;
   gap: 8px 12px;
@@ -70,6 +70,8 @@
 }
 
 .social-icons a {
+  display: grid;
+  place-items: center;
   padding: 10px;
   border-radius: 50%;
   color: var(--primary);
@@ -170,7 +172,7 @@
 /* ===== 最新文章（有序列表 + 序号徽标）===== */
 .posts {
   max-width: 800px;
-  margin: 60px auto;
+  margin: 20px auto 60px;
 }
 .posts-list {
   list-style: none;
@@ -432,18 +434,6 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
 
   <img src="/images/avatar.jpg" class="avatar">
 
-  <h1 class="hero-title">
-    <span class="hero-title__wave" aria-hidden="true">👋</span>
-    <span class="hero-title__main">
-      <span class="hero-title__main-inner">你好，我是Ean7</span>
-    </span>
-  </h1>
-
-  <p class="hero-desc">
-    <span class="hero-desc__line hero-desc__line--1">专注于 工业 IoT / 3D 可视化 / AI 视觉</span>
-    <span class="hero-desc__line hero-desc__line--2">构建高性能系统与交互体验</span>
-  </p>
-
   <!-- 社交图标 -->
   <div class="social-icons">
 
@@ -455,14 +445,26 @@ html[data-theme="dark"] .posts-list__link:hover .posts-list__title {
       <i data-feather="mail"></i>
     </a>
 
+    <a class="social-platform" href="https://www.toutiao.com/c/user/token/CiePYlvhztWY-Pfxg719XiEtNtaaQWgNULdU9j7FjP43CiFUyXF7XesaSQo8AAAAAAAAAAAAAFEuWlJY7tzek0p5maZXUV2THBmj1TLMIak_ZxgDT-u_Twk0cacofFaNmuB5vMJxACDhEM7Pog4Yw8WD6gQiAQN7v9lO/?source=mine_profile&amp;log_from=0a87f79cb66018_1795664034816" target="_blank" rel="noopener noreferrer" aria-label="今日头条" title="今日头条"><img src="https://www.toutiao.com/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
+    <a class="social-platform" href="https://blog.csdn.net/qq_43085008?spm=1010.2135.3001.5343" target="_blank" rel="noopener noreferrer" aria-label="CSDN" title="CSDN"><img src="https://g.csdnimg.cn/static/logo/favicon32.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
     <a class="social-platform" href="https://space.bilibili.com/244185393" target="_blank" rel="noopener noreferrer" aria-label="B站" title="B站"><img src="https://www.bilibili.com/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
     <a class="social-platform" href="https://juejin.cn/user/1979587663504663" target="_blank" rel="noopener noreferrer" aria-label="稀土掘金" title="稀土掘金"><img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/static/favicons/favicon-32x32.png" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
-    <a class="social-platform" href="https://www.zhihu.com/people/yang-qi-88-10" target="_blank" rel="noopener noreferrer" aria-label="知乎" title="知乎"><img src="https://static.zhihu.com/heifetz/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
-    <a class="social-platform" href="https://blog.csdn.net/qq_43085008?spm=1010.2135.3001.5343" target="_blank" rel="noopener noreferrer" aria-label="CSDN" title="CSDN"><img src="https://g.csdnimg.cn/static/logo/favicon32.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
     <a class="social-platform" href="https://home.cnblogs.com/u/ean7" target="_blank" rel="noopener noreferrer" aria-label="博客园" title="博客园"><img src="https://common.cnblogs.com/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
-    <a class="social-platform" href="https://www.toutiao.com/c/user/token/CiePYlvhztWY-Pfxg719XiEtNtaaQWgNULdU9j7FjP43CiFUyXF7XesaSQo8AAAAAAAAAAAAAFEuWlJY7tzek0p5maZXUV2THBmj1TLMIak_ZxgDT-u_Twk0cacofFaNmuB5vMJxACDhEM7Pog4Yw8WD6gQiAQN7v9lO/?source=mine_profile&amp;log_from=0a87f79cb66018_1795664034816" target="_blank" rel="noopener noreferrer" aria-label="今日头条" title="今日头条"><img src="https://www.toutiao.com/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
+    <a class="social-platform" href="https://www.zhihu.com/people/yang-qi-88-10" target="_blank" rel="noopener noreferrer" aria-label="知乎" title="知乎"><img src="https://static.zhihu.com/heifetz/favicon.ico" alt="" width="22" height="22" referrerpolicy="no-referrer"></a>
 
   </div>
+
+  <h1 class="hero-title">
+    <span class="hero-title__wave" aria-hidden="true">👋</span>
+    <span class="hero-title__main">
+      <span class="hero-title__main-inner">你好，我是Ean7</span>
+    </span>
+  </h1>
+
+  <p class="hero-desc">
+    <span class="hero-desc__line hero-desc__line--1">专注于 工业 IoT / 3D 可视化 / AI 视觉</span>
+    <span class="hero-desc__line hero-desc__line--2">构建高性能系统与交互体验</span>
+  </p>
 
 </section>
 
